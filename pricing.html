@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SITENAME — Pricing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav id="navbar">
+  <a href="index.html" class="nav-logo"><div class="logo-box"><span class="site-letter">M</span></div><span class="site-name">My Website</span></a>
+  <div class="nav-links">
+    <a href="features.html">Features</a><a href="pricing.html" style="color:var(--acc)">Pricing</a>
+    <a href="market.html">Market</a><a href="faq.html">FAQ</a><a href="contact.html">Contact</a>
+  </div>
+  <div class="nav-actions" id="navActions"></div>
+  <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+</nav>
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<div class="drawer" id="siteDrawer">
+  <div class="drawer-head"><a href="index.html" class="nav-logo"><div class="logo-box"><span class="site-letter">M</span></div><span class="site-name">My Website</span></a><button class="drawer-close" id="drawerClose">✕</button></div>
+  <div class="drawer-links">
+    <a href="index.html" class="drawer-link" onclick="closeDrawer()"><span class="drawer-link-icon">🏠</span>Home</a>
+    <a href="features.html" class="drawer-link" onclick="closeDrawer()"><span class="drawer-link-icon">⚡</span>Features</a>
+    <a href="pricing.html" class="drawer-link active" onclick="closeDrawer()"><span class="drawer-link-icon">💰</span>Pricing</a>
+    <a href="market.html" class="drawer-link" onclick="closeDrawer()"><span class="drawer-link-icon">🌐</span>Market</a>
+    <a href="faq.html" class="drawer-link" onclick="closeDrawer()"><span class="drawer-link-icon">❓</span>FAQ</a>
+    <a href="contact.html" class="drawer-link" onclick="closeDrawer()"><span class="drawer-link-icon">📩</span>Contact</a>
+  </div>
+  <div class="drawer-divider"></div>
+  <div class="drawer-section-label">🌍 Language</div>
+  <div class="lang-grid">
+    <button class="lang-btn active" data-lang="en" onclick="setLang('en')"><span class="lang-flag">🇺🇸</span><span class="lang-name">English</span></button>
+    <button class="lang-btn" data-lang="es" onclick="setLang('es')"><span class="lang-flag">🇪🇸</span><span class="lang-name">Español</span></button>
+    <button class="lang-btn" data-lang="zh" onclick="setLang('zh')"><span class="lang-flag">🇨🇳</span><span class="lang-name">中文</span></button>
+  </div>
+  <div class="drawer-divider"></div>
+  <div class="drawer-toggle-row"><span class="drawer-toggle-label">✨ Spring Effect</span><button class="toggle-switch on" id="springToggle"></button></div>
+  <div class="drawer-toggle-row"><span class="drawer-toggle-label">🌙 Light Theme</span><button class="toggle-switch" id="themeToggle"></button></div>
+  <div class="drawer-divider"></div>
+  <div class="drawer-footer" id="mobileActions"></div>
+</div>
+
+<div class="pricing-dark-page">
+  <section class="pricing-dark-section">
+    <div class="pricing-dark-badge">Pricing</div>
+    <h1 class="pricing-dark-title reveal">Choose Your<br><span class="grad">Plan</span></h1>
+    <p class="pricing-dark-sub reveal">Flexible pricing options to suit your needs</p>
+
+    <!-- 3 Days -->
+    <div class="dark-plan-card reveal">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+        <div>
+          <div class="dark-plan-name">3 Days</div>
+          <div class="dark-plan-period">3 days</div>
+        </div>
+        <div class="dark-plan-price">$45</div>
+      </div>
+      <a href="quick-purchase.html?plan=3day" class="dark-plan-buy">Buy Now</a>
+      <div class="dark-plan-feats">
+        <div class="dark-plan-feat"><div class="dark-feat-check">✓</div>Unlimited requests</div>
+        <div class="dark-plan-feat"><div class="dark-feat-check">✓</div>Priority support</div>
+        <div class="dark-plan-feat"><div class="dark-feat-check">✓</div>API access</div>
+      </div>
+    </div>
+
+    <!-- 7 Days -->
+    <div class="dark-plan-card reveal">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+        <div><div class="dark-plan-name">7 Days</div><div class="dark-plan-period">7 days</div></div>
+        <div class="dark-plan-price">$79</div>
+      </div>
+      <a href="quick-purchase.html?plan=7day" class="dark-plan-buy">Buy Now</a>
+      <div class="dark-plan-feats">
+        <div class="dark-plan-feat"><div class="dark-feat-check">✓</div>Unlimited requests</div>
+        <div class="dark-plan-feat"><div class="dark-feat-check">✓</div>Priority support</div>
+        <div class="dark-plan-feat"><div class="dark-feat-check">✓</div>API access</div>
+      </div>
+    </div>
+
+    <!-- 15 Days POPULAR -->
+    <div class="dark-plan-card popular reveal">
+      <div class="dark-plan-popular-badge">Most Popular</div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;padding-top:8px">
+        <div><div class="dark-plan-name">15 Days</div><div class="dark-plan-period">15 days</div></div>
+        <div class="dark-plan-price">$139</div>
+      </div>
+      <a href="quick-purchase.html?plan=15day" class="dark-plan-buy popular-buy">Buy Now</a>
+      <div class="dark-plan-feats">
+        <div class="dark-plan-feat"><div class="dark-feat-check">✓</div>Unlimited requests</div>
+        <div class="dark-plan-feat"><div class="dark-feat-check">✓</div>Priority support</div>
+        <div class="dark-plan-feat"><div class="dark-feat-check">✓</div>API access</div>
+      </div>
+    </div>
+
+    <!-- 30 Days -->
+    <div class="dark-plan-card reveal">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+        <div><div class="dark-plan-name">30 Days</div><div class="dark-plan-period">30 days</div></div>
+        <div class="dark-plan-price">$249</div>
+      </div>
+      <a href="quick-purchase.html?plan=30day" class="dark-plan-buy">Buy Now</a>
+      <div class="dark-plan-feats">
+        <div class="dark-plan-feat"><div class="dark-feat-check">✓</div>Unlimited requests</div>
+        <div class="dark-plan-feat"><div class="dark-feat-check">✓</div>Priority support</div>
+        <div class="dark-plan-feat"><div class="dark-feat-check">✓</div>API access</div>
+      </div>
+    </div>
+
+    <!-- One Year -->
+    <div class="dark-plan-card reveal">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+        <div><div class="dark-plan-name">One Year</div><div class="dark-plan-period">1 year</div></div>
+        <div class="dark-plan-price">$2490</div>
+      </div>
+      <a href="quick-purchase.html?plan=oneyear" class="dark-plan-buy">Buy Now</a>
+      <div class="dark-plan-feats">
+        <div class="dark-plan-feat"><div class="dark-feat-check">✓</div>Unlimited requests</div>
+        <div class="dark-plan-feat"><div class="dark-feat-check">✓</div>Priority support</div>
+        <div class="dark-plan-feat"><div class="dark-feat-check">✓</div>API access</div>
+      </div>
+    </div>
+
+    <!-- Payment methods -->
+    <div style="margin-top:40px;text-align:center">
+      <p style="font-size:13px;color:#44445a;margin-bottom:16px;font-family:var(--mono);text-transform:uppercase;letter-spacing:1.5px">Accepted Payments · Crypto Only</p>
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px">
+        <span style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:100px;padding:6px 14px;font-size:12px;color:#8888aa">₿ Bitcoin</span>
+        <span style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:100px;padding:6px 14px;font-size:12px;color:#8888aa">⧫ Ethereum</span>
+        <span style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:100px;padding:6px 14px;font-size:12px;color:#8888aa">₮ USDT</span>
+        <span style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:100px;padding:6px 14px;font-size:12px;color:#8888aa">◎ Solana</span>
+        <span style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:100px;padding:6px 14px;font-size:12px;color:#8888aa">◈ BNB</span>
+        <span style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:100px;padding:6px 14px;font-size:12px;color:#8888aa">+ more</span>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer style="background:#0a0a18;border-top:1px solid rgba(255,255,255,.07)">
+  <div class="foot-grid" style="padding:36px 5%">
+    <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><div class="logo-box" style="width:32px;height:32px;font-size:14px"><span class="site-letter">M</span></div><span class="site-name" style="color:#eeeeff;font-family:var(--disp);font-weight:800;font-size:17px">My Website</span></div><p class="site-tagline" style="color:#44445a;font-size:13px;max-width:220px;line-height:1.65"></p></div>
+    <div><h4 style="color:#55556a;font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px">Product</h4><a href="features.html" style="display:block;font-size:13px;color:#44445a;margin-bottom:9px">Features</a><a href="pricing.html" style="display:block;font-size:13px;color:#44445a;margin-bottom:9px">Pricing</a><a href="faq.html" style="display:block;font-size:13px;color:#44445a">FAQ</a></div>
+    <div><h4 style="color:#55556a;font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px">Legal</h4><a href="#" style="display:block;font-size:13px;color:#44445a;margin-bottom:9px">Terms</a><a href="#" style="display:block;font-size:13px;color:#44445a">Privacy</a></div>
+    <div><h4 style="color:#55556a;font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px">Support</h4><a href="contact.html" style="display:block;font-size:13px;color:#44445a;margin-bottom:9px">Contact</a><a href="#" style="display:block;font-size:13px;color:#44445a">Docs</a></div>
+  </div>
+  <div style="border-top:1px solid rgba(255,255,255,.07);padding:16px 5%;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
+    <span class="site-copyright" style="font-size:12px;color:#44445a"></span>
+    <span style="font-size:12px;color:#44445a">Crypto payments only · 50+ countries</span>
+  </div>
+</footer>
+
+<div id="toast" class="toast"></div>
+<script src="security.js"></script>
+<script src="main.js"></script>
+</body>
+</html>

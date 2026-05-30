@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SITENAME — Premium API Token Service</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ═══ NAVBAR ═══ -->
+<nav id="navbar">
+  <a href="index.html" class="nav-logo">
+    <div class="logo-box"><span class="site-letter">M</span></div>
+    <span class="site-name">My Website</span>
+  </a>
+  <div class="nav-links">
+    <a href="features.html">Features</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="market.html">Market</a>
+    <a href="faq.html">FAQ</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <div class="nav-actions" id="navActions">
+    <a href="login.html" class="btn btn-ghost" style="font-size:13px;padding:8px 16px">Login</a>
+    <a href="register.html" class="btn btn-primary" style="font-size:13px;padding:8px 16px">Get Started →</a>
+  </div>
+  <button class="hamburger" id="hamburger" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ═══ MOBILE DRAWER ═══ -->
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<div class="drawer" id="siteDrawer">
+  <div class="drawer-head">
+    <a href="index.html" class="nav-logo" onclick="closeDrawer()">
+      <div class="logo-box"><span class="site-letter">M</span></div>
+      <span class="site-name">My Website</span>
+    </a>
+    <button class="drawer-close" id="drawerClose">✕</button>
+  </div>
+  <div class="drawer-links">
+    <a href="index.html"    class="drawer-link active" onclick="closeDrawer()"><span class="drawer-link-icon">🏠</span>Home</a>
+    <a href="features.html" class="drawer-link"        onclick="closeDrawer()"><span class="drawer-link-icon">⚡</span>Features</a>
+    <a href="pricing.html"  class="drawer-link"        onclick="closeDrawer()"><span class="drawer-link-icon">💰</span>Pricing</a>
+    <a href="market.html"   class="drawer-link"        onclick="closeDrawer()"><span class="drawer-link-icon">🌐</span>Market</a>
+    <a href="faq.html"      class="drawer-link"        onclick="closeDrawer()"><span class="drawer-link-icon">❓</span>FAQ</a>
+    <a href="contact.html"  class="drawer-link"        onclick="closeDrawer()"><span class="drawer-link-icon">📩</span>Contact</a>
+  </div>
+  <div class="drawer-divider"></div>
+  <!-- Language -->
+  <div class="drawer-section-label">🌍 Language</div>
+  <div class="lang-grid">
+    <button class="lang-btn active" data-lang="en" onclick="setLang('en')"><span class="lang-flag">🇺🇸</span><span class="lang-name">English</span></button>
+    <button class="lang-btn" data-lang="es" onclick="setLang('es')"><span class="lang-flag">🇪🇸</span><span class="lang-name">Español</span></button>
+    <button class="lang-btn" data-lang="zh" onclick="setLang('zh')"><span class="lang-flag">🇨🇳</span><span class="lang-name">中文</span></button>
+  </div>
+  <div class="drawer-divider"></div>
+  <!-- Toggles -->
+  <div class="drawer-toggle-row">
+    <span class="drawer-toggle-label">✨ Spring Effect</span>
+    <button class="toggle-switch on" id="springToggle"></button>
+  </div>
+  <div class="drawer-toggle-row">
+    <span class="drawer-toggle-label">🌙 Light Theme</span>
+    <button class="toggle-switch" id="themeToggle"></button>
+  </div>
+  <div class="drawer-divider"></div>
+  <!-- Auth buttons -->
+  <div class="drawer-footer" id="mobileActions">
+    <a href="login.html"    class="drawer-auth-btn drawer-auth-login">Login</a>
+    <a href="register.html" class="drawer-auth-btn drawer-auth-signup">Get Started →</a>
+  </div>
+</div>
+
+<!-- ═══ HERO ═══ -->
+<section id="hero">
+  <div class="hero-glow"></div>
+  <div class="grid-overlay"></div>
+
+  <div class="hero-badge"><span class="dot"></span>Lightning Fast · 99.9% Uptime</div>
+
+  <h1>Premium <span class="grad">API Token</span><br>Solutions</h1>
+
+  <p class="hero-sub">
+    Get instant token codes with military-grade encryption.
+    Blazing fast sub-100ms response times with enterprise-grade reliability across 50+ countries.
+  </p>
+
+  <div class="hero-btns">
+    <a href="quick-purchase.html" class="btn btn-primary btn-lg">Buy Now →</a>
+    <a href="register.html"       class="btn btn-ghost   btn-lg">Create Account</a>
+  </div>
+
+  <div class="hero-stats">
+    <div class="hstat"><span class="hstat-icon">⚡</span><span class="hstat-val">&lt;100ms</span><span class="hstat-lbl">Response</span></div>
+    <div class="hstat"><span class="hstat-icon">🟢</span><span class="hstat-val">99.9%</span><span class="hstat-lbl">Uptime</span></div>
+    <div class="hstat"><span class="hstat-icon">🎧</span><span class="hstat-val">24/7</span><span class="hstat-lbl">Support</span></div>
+    <div class="hstat"><span class="hstat-icon">🌍</span><span class="hstat-val">50+</span><span class="hstat-lbl">Countries</span></div>
+  </div>
+
+  <!-- ═══ REAL iPHONE MOCKUP ═══ -->
+  <div class="phone-mockup-section">
+    <div class="iphone-glow"></div>
+    <div class="iphone-outer">
+      <div class="iphone-shell">
+        <!-- Dynamic Island -->
+        <div class="iphone-notch-area">
+          <div class="iphone-dynamic-island"></div>
+        </div>
+        <!-- Status bar -->
+        <div class="iphone-status">
+          <span>9:41</span>
+          <div class="iphone-signal">
+            <div class="iphone-bar" style="width:3px;height:7px;opacity:.4"></div>
+            <div class="iphone-bar" style="width:3px;height:10px;opacity:.6"></div>
+            <div class="iphone-bar" style="width:3px;height:13px;opacity:.8"></div>
+            <div class="iphone-bar" style="width:3px;height:16px"></div>
+            <span style="margin-left:6px;font-size:11px">WiFi ■</span>
+          </div>
+        </div>
+        <!-- App content -->
+        <div class="iphone-body">
+          <!-- Status row -->
+          <div class="ip-status-row">
+            <div class="ip-status-live">
+              <div class="ip-live-dot"></div>
+              Active
+            </div>
+            <div class="ip-shield-icon">🛡</div>
+          </div>
+          <!-- Incoming request card -->
+          <div class="ip-req-card">
+            <div class="ip-req-meta">Incoming Request</div>
+            <div class="ip-req-url">GET /api/otp/request</div>
+            <div class="ip-progress"><div class="ip-prog-fill"></div></div>
+            <div class="ip-req-ms">⏱ 87ms</div>
+          </div>
+          <!-- OTP code card -->
+          <div class="ip-code-card">
+            <div class="ip-code-meta">OTP Code</div>
+            <div class="ip-code-num" id="otpNum">430577</div>
+          </div>
+          <!-- Dots -->
+          <div class="ip-dots">
+            <div class="ip-dot on"></div>
+            <div class="ip-dot"></div>
+            <div class="ip-dot"></div>
+          </div>
+        </div>
+        <!-- Home bar -->
+        <div class="iphone-home"><div class="iphone-home-bar"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FEATURES ═══ -->
+<section class="feat-section">
+  <div class="feat-header">
+    <div class="sec-label">Features</div>
+    <h2 class="sec-title" style="margin-top:10px">
+      Why Choose <span class="site-name grad">My Website</span>?
+    </h2>
+    <p class="sec-sub" style="margin:10px auto 0">
+      Built with cutting-edge technology for the most reliable API token service
+    </p>
+  </div>
+  <div class="feat-cards-grid">
+    <div class="feat-card-new purple reveal">
+      <div class="feat-icon-box purple">⚡</div>
+      <h3>Lightning Fast</h3>
+      <p>Sub-100ms delivery via our optimized global edge network across 50+ regions.</p>
+      <span class="feat-tag purple">&lt;100ms avg</span>
+      <span class="feat-tag purple">CDN Powered</span>
+    </div>
+    <div class="feat-card-new blue reveal reveal-delay-1">
+      <div class="feat-icon-box blue">🛡️</div>
+      <h3>Military-Grade Security</h3>
+      <p>AES-256 encryption on every request. End-to-end protected. Zero-log policy.</p>
+      <span class="feat-tag blue">AES-256</span>
+      <span class="feat-tag blue">TLS 1.3</span>
+    </div>
+    <div class="feat-card-new green wide reveal reveal-delay-2">
+      <div class="uptime-inner">
+        <div class="uptime-text">
+          <div class="feat-icon-box green">🌐</div>
+          <h3>99.9% Uptime</h3>
+          <p>Redundant servers across multiple global regions with auto-failover. Always online.</p>
+          <span class="uptime-badge">● All systems operational</span>
+        </div>
+        <div class="uptime-bars">
+          <div class="uptime-bar" style="height:26px"></div>
+          <div class="uptime-bar" style="height:36px"></div>
+          <div class="uptime-bar" style="height:20px"></div>
+          <div class="uptime-bar" style="height:36px"></div>
+          <div class="uptime-bar" style="height:30px"></div>
+          <div class="uptime-bar" style="height:36px"></div>
+          <div class="uptime-bar" style="height:24px"></div>
+          <div class="uptime-bar" style="height:36px"></div>
+        </div>
+      </div>
+    </div>
+    <div class="feat-card-new orange reveal">
+      <div class="feat-icon-box orange">🔒</div>
+      <h3>Private &amp; Secure</h3>
+      <p>Your data never leaves our encrypted servers. Multi-layer protection enforced.</p>
+      <span class="feat-tag orange">Multi-layer</span>
+      <span class="feat-tag orange">Zero Logs</span>
+    </div>
+    <div class="feat-card-new pink reveal reveal-delay-1">
+      <div class="feat-icon-box pink">🔌</div>
+      <h3>Easy Integration</h3>
+      <p>REST API + WebSocket with comprehensive docs and SDK examples in 10+ languages.</p>
+      <span class="feat-tag purple">REST API</span>
+      <span class="feat-tag blue">WebSocket</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ MARQUEE ═══ -->
+<div class="marquee-section">
+  <p class="marquee-label">Supported in 50+ Countries Worldwide</p>
+  <div class="marquee-track" id="marquee"></div>
+</div>
+
+<!-- ═══ PRICING ═══ -->
+<section class="pricing-section">
+  <div class="pricing-header">
+    <div class="sec-label">Pricing</div>
+    <h2 class="sec-title" style="margin-top:10px">Choose Your Plan</h2>
+    <p class="sec-sub" style="margin-top:10px">Flexible pricing options to suit your needs</p>
+  </div>
+  <div class="pricing-cards-stack">
+
+    <div class="plan-card-new reveal">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div><div class="plan-name">3 Days</div><div class="plan-period">3 days</div></div>
+        <div class="plan-price-new">$45</div>
+      </div>
+      <div class="plan-feats-new" style="margin-top:14px">
+        <div class="plan-feat-item"><div class="plan-feat-check">✓</div>Unlimited requests</div>
+        <div class="plan-feat-item"><div class="plan-feat-check">✓</div>Priority support</div>
+        <div class="plan-feat-item"><div class="plan-feat-check">✓</div>API access</div>
+      </div>
+      <a href="quick-purchase.html?plan=3day" class="btn-plan-new" style="display:block;margin-top:16px;padding:13px;text-align:center;border-radius:12px;font-size:15px;font-weight:600;text-decoration:none">Buy Now</a>
+    </div>
+
+    <div class="plan-card-new reveal reveal-delay-1">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div><div class="plan-name">7 Days</div><div class="plan-period">7 days</div></div>
+        <div class="plan-price-new">$79</div>
+      </div>
+      <div class="plan-feats-new" style="margin-top:14px">
+        <div class="plan-feat-item"><div class="plan-feat-check">✓</div>Unlimited requests</div>
+        <div class="plan-feat-item"><div class="plan-feat-check">✓</div>Priority support</div>
+        <div class="plan-feat-item"><div class="plan-feat-check">✓</div>API access</div>
+      </div>
+      <a href="quick-purchase.html?plan=7day" class="btn-plan-new" style="display:block;margin-top:16px;padding:13px;text-align:center;border-radius:12px;font-size:15px;font-weight:600;text-decoration:none">Buy Now</a>
+    </div>
+
+    <div class="plan-card-new popular reveal reveal-delay-2">
+      <div class="plan-popular-badge">Most Popular</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding-top:10px">
+        <div><div class="plan-name">15 Days</div><div class="plan-period">15 days</div></div>
+        <div class="plan-price-new">$139</div>
+      </div>
+      <div class="plan-feats-new" style="margin-top:14px">
+        <div class="plan-feat-item"><div class="plan-feat-check">✓</div>Unlimited requests</div>
+        <div class="plan-feat-item"><div class="plan-feat-check">✓</div>Priority support</div>
+        <div class="plan-feat-item"><div class="plan-feat-check">✓</div>API access</div>
+      </div>
+      <a href="quick-purchase.html?plan=15day" class="btn-plan-new accent" style="display:block;margin-top:16px;padding:13px;text-align:center;border-radius:12px;font-size:15px;font-weight:600;text-decoration:none">Buy Now</a>
+    </div>
+
+    <div class="plan-card-new reveal reveal-delay-3">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div><div class="plan-name">30 Days</div><div class="plan-period">30 days</div></div>
+        <div class="plan-price-new">$249</div>
+      </div>
+      <div class="plan-feats-new" style="margin-top:14px">
+        <div class="plan-feat-item"><div class="plan-feat-check">✓</div>Unlimited requests</div>
+        <div class="plan-feat-item"><div class="plan-feat-check">✓</div>Priority support</div>
+        <div class="plan-feat-item"><div class="plan-feat-check">✓</div>API access</div>
+      </div>
+      <a href="quick-purchase.html?plan=30day" class="btn-plan-new" style="display:block;margin-top:16px;padding:13px;text-align:center;border-radius:12px;font-size:15px;font-weight:600;text-decoration:none">Buy Now</a>
+    </div>
+
+    <div class="plan-card-new reveal">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div><div class="plan-name">One Year</div><div class="plan-period">1 year</div></div>
+        <div class="plan-price-new">$2490</div>
+      </div>
+      <div class="plan-feats-new" style="margin-top:14px">
+        <div class="plan-feat-item"><div class="plan-feat-check">✓</div>Unlimited requests</div>
+        <div class="plan-feat-item"><div class="plan-feat-check">✓</div>Priority support</div>
+        <div class="plan-feat-item"><div class="plan-feat-check">✓</div>API access</div>
+      </div>
+      <a href="quick-purchase.html?plan=oneyear" class="btn-plan-new" style="display:block;margin-top:16px;padding:13px;text-align:center;border-radius:12px;font-size:15px;font-weight:600;text-decoration:none">Buy Now</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ PAYMENT METHODS ═══ -->
+<section class="payments-section">
+  <div class="payments-header">
+    <div class="sec-label">Secure Payments</div>
+    <h2 class="sec-title" style="margin-top:10px">Accepted Payment Methods</h2>
+    <p class="sec-sub" style="margin-top:10px">Pay securely with your preferred cryptocurrency</p>
+  </div>
+  <div class="pay-trust-badges">
+    <span class="pay-badge green"><div class="pb-dot"></div>Instant Processing</span>
+    <span class="pay-badge blue"><div class="pb-dot"></div>100% Secure</span>
+    <span class="pay-badge purple"><div class="pb-dot"></div>Anonymous</span>
+  </div>
+  <div class="crypto-grid-new">
+    <div class="crypto-card-new reveal"><div class="crypto-icon-new" style="background:rgba(249,115,22,.15);color:#f97316;font-size:22px">₿</div><div><div class="crypto-info-name">Bitcoin</div><div class="crypto-info-tag">BTC</div></div></div>
+    <div class="crypto-card-new reveal"><div class="crypto-icon-new" style="background:rgba(98,126,234,.15);color:#627eea;font-size:22px">⧫</div><div><div class="crypto-info-name">Ethereum</div><div class="crypto-info-tag">ETH</div></div></div>
+    <div class="crypto-card-new reveal"><div class="crypto-icon-new" style="background:rgba(190,190,190,.15);color:#bbb;font-size:22px">Ł</div><div><div class="crypto-info-name">Litecoin</div><div class="crypto-info-tag">LTC</div></div></div>
+    <div class="crypto-card-new reveal"><div class="crypto-icon-new" style="background:rgba(242,104,34,.15);color:#f26822;font-size:22px">ɱ</div><div><div class="crypto-info-name">Monero</div><div class="crypto-info-tag">XMR</div></div></div>
+    <div class="crypto-card-new reveal"><div class="crypto-icon-new" style="background:rgba(0,153,209,.15);color:#0099d1;font-size:22px">◆</div><div><div class="crypto-info-name">TON</div><div class="crypto-info-tag">TON</div></div></div>
+    <div class="crypto-card-new reveal"><div class="crypto-icon-new" style="background:rgba(38,161,123,.15);color:#26a17b;font-size:22px">₮</div><div><div class="crypto-info-name">USDT TRC-20</div><div class="crypto-info-tag">TRC-20</div></div></div>
+    <div class="crypto-card-new reveal"><div class="crypto-icon-new" style="background:rgba(38,161,123,.15);color:#26a17b;font-size:22px">₮</div><div><div class="crypto-info-name">USDT BEP-20</div><div class="crypto-info-tag">BEP-20</div></div></div>
+    <div class="crypto-card-new reveal"><div class="crypto-icon-new" style="background:rgba(243,186,11,.15);color:#f3ba0b;font-size:22px">◈</div><div><div class="crypto-info-name">BNB</div><div class="crypto-info-tag">BEP-20</div></div></div>
+    <div class="crypto-card-new reveal"><div class="crypto-icon-new" style="background:rgba(153,69,255,.15);color:#9945ff;font-size:22px">◎</div><div><div class="crypto-info-name">Solana</div><div class="crypto-info-tag">SOL</div></div></div>
+    <div class="crypto-card-new reveal"><div class="crypto-icon-new" style="background:rgba(52,68,169,.15);color:#3444a9;font-size:22px">✕</div><div><div class="crypto-info-name">XRP</div><div class="crypto-info-tag">XRP</div></div></div>
+  </div>
+  <p class="pay-note-bottom" style="margin-top:24px;text-align:center;font-size:12px">Crypto payments only · Instant processing · Anonymous</p>
+</section>
+
+<!-- ═══ FAQ ═══ -->
+<section class="faq-section">
+  <div class="faq-header">
+    <div class="sec-label">FAQ</div>
+    <h2 class="sec-title" style="margin-top:10px;text-align:center">Frequently Asked Questions</h2>
+  </div>
+  <div class="faq-wrap">
+    <div class="faq-item-new reveal">
+      <button class="faq-trigger-new" onclick="toggleFaq(this)"><span>How fast is the OTP delivery?</span><div class="faq-chevron-new">+</div></button>
+      <div class="faq-body-new"><div class="faq-inner-new">Tokens are delivered in under 100ms on average. Our globally distributed infrastructure ensures industry-leading response times 24/7.</div></div>
+    </div>
+    <div class="faq-item-new reveal reveal-delay-1">
+      <button class="faq-trigger-new" onclick="toggleFaq(this)"><span>Is my data secure?</span><div class="faq-chevron-new">+</div></button>
+      <div class="faq-body-new"><div class="faq-inner-new">All data is encrypted with AES-256 at rest and in transit. We operate a strict zero-log policy and never share your data with third parties.</div></div>
+    </div>
+    <div class="faq-item-new reveal reveal-delay-2">
+      <button class="faq-trigger-new" onclick="toggleFaq(this)"><span>Can I cancel my subscription?</span><div class="faq-chevron-new">+</div></button>
+      <div class="faq-body-new"><div class="faq-inner-new">Plans are time-based with no auto-renewal. Simply don't repurchase when your plan expires. No cancellation needed.</div></div>
+    </div>
+    <div class="faq-item-new reveal reveal-delay-3">
+      <button class="faq-trigger-new" onclick="toggleFaq(this)"><span>Do you offer refunds?</span><div class="faq-chevron-new">+</div></button>
+      <div class="faq-body-new"><div class="faq-inner-new">We offer a satisfaction guarantee. Contact support within 24 hours of purchase if you experience any technical issues.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CTA ═══ -->
+<section class="cta-section-new">
+  <div class="cta-card reveal">
+    <div class="cta-offer-badge"><span class="dot"></span>Limited Time Offer</div>
+    <h2>Ready to Get Started?</h2>
+    <p>Join thousands of satisfied users and experience the fastest service available.</p>
+    <div class="cta-perks">
+      <div class="cta-perk"><div class="cta-perk-check">✓</div>No setup fees</div>
+      <div class="cta-perk"><div class="cta-perk-check">✓</div>Instant access</div>
+    </div>
+    <a href="quick-purchase.html" class="btn btn-primary btn-lg">Buy Now →</a>
+    <p class="cta-cancel-note">Cancel anytime. No questions asked.</p>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="foot-grid">
+    <div>
+      <div class="foot-logo-name">
+        <div class="logo-box" style="width:32px;height:32px;font-size:14px"><span class="site-letter">M</span></div>
+        <span class="site-name" style="font-family:var(--disp);font-size:17px;font-weight:800">My Website</span>
+      </div>
+      <p class="foot-tagline site-tagline">Premium API Token Solutions</p>
+    </div>
+    <div>
+      <h4>Product</h4>
+      <a href="features.html">Features</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="market.html">Market</a>
+      <a href="faq.html">FAQ</a>
+    </div>
+    <div>
+      <h4>Legal</h4>
+      <a href="#">Terms of Service</a>
+      <a href="#">Privacy Policy</a>
+    </div>
+    <div>
+      <h4>Support</h4>
+      <a href="contact.html">Contact</a>
+      <a href="#">Documentation</a>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span class="site-copyright">© 2026 My Website. All rights reserved.</span>
+    <span>Crypto payments only · 50+ countries</span>
+  </div>
+</footer>
+
+<div id="toast" class="toast"></div>
+<script src="security.js"></script>
+<script src="main.js"></script>
+</body>
+</html>

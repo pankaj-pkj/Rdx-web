@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /firebase-config.js
+Disallow: /security.js
+Disallow: /login.html
+Disallow: /register.html
+Allow: /
+
+Sitemap: https://yoursite.com/sitemap.xml

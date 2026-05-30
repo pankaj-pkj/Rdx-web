@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page Not Found</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap');
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --acc:#6c63ff;
+    --acc2:#9f7aea;
+    --bg:#06060f;
+    --t:#eeeeff;
+    --t2:#8888aa;
+    --t3:#44445a;
+    --sans:'DM Sans',sans-serif;
+    --disp:'Syne',sans-serif;
+  }
+  html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--t);-webkit-font-smoothing:antialiased}
+
+  /* Grid background */
+  body::before{
+    content:'';position:fixed;inset:0;pointer-events:none;
+    background-image:
+      linear-gradient(rgba(108,99,255,.04) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(108,99,255,.04) 1px,transparent 1px);
+    background-size:50px 50px;
+    mask-image:radial-gradient(ellipse 80% 70% at 50% 40%,black,transparent);
+    z-index:0;
+  }
+
+  /* Glow */
+  .glow{
+    position:fixed;top:-120px;left:50%;transform:translateX(-50%);
+    width:600px;height:600px;border-radius:50%;
+    background:radial-gradient(circle,rgba(108,99,255,.1) 0%,transparent 65%);
+    pointer-events:none;z-index:0;
+  }
+
+  /* Main layout */
+  .page{
+    min-height:100vh;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:24px;text-align:center;position:relative;z-index:1;
+  }
+
+  /* Icon circle */
+  .icon-wrap{
+    width:90px;height:90px;border-radius:50%;
+    background:rgba(108,99,255,.1);
+    border:1.5px solid rgba(108,99,255,.25);
+    display:flex;align-items:center;justify-content:center;
+    font-size:36px;margin:0 auto 24px;
+    animation:iconPop .6s cubic-bezier(.34,1.56,.64,1) both;
+  }
+  @keyframes iconPop{from{transform:scale(.3);opacity:0}to{transform:scale(1);opacity:1}}
+
+  /* 404 number */
+  .num-404{
+    font-family:var(--disp);
+    font-size:clamp(80px,25vw,140px);
+    font-weight:800;
+    line-height:1;
+    letter-spacing:-4px;
+    background:linear-gradient(135deg,rgba(108,99,255,.35) 0%,rgba(108,99,255,.08) 100%);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    background-clip:text;
+    margin-bottom:8px;
+    animation:fadeUp .6s .1s both;
+  }
+
+  .title{
+    font-family:var(--disp);
+    font-size:clamp(22px,5vw,32px);
+    font-weight:800;
+    color:var(--t);
+    margin-bottom:12px;
+    animation:fadeUp .6s .18s both;
+  }
+  .sub{
+    font-size:15px;color:var(--t2);
+    max-width:380px;line-height:1.75;margin:0 auto 32px;
+    animation:fadeUp .6s .24s both;
+  }
+
+  /* Buttons */
+  .btn-row{
+    display:flex;gap:12px;flex-wrap:wrap;justify-content:center;
+    animation:fadeUp .6s .3s both;
+  }
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    padding:13px 28px;border-radius:12px;
+    font-family:var(--sans);font-size:15px;font-weight:600;
+    cursor:pointer;transition:all .22s;text-decoration:none;border:none;
+  }
+  .btn-primary{
+    background:var(--acc);color:#fff;
+    box-shadow:0 4px 20px rgba(108,99,255,.35);
+  }
+  .btn-primary:hover{
+    background:#7d74ff;
+    box-shadow:0 6px 28px rgba(108,99,255,.48);
+    transform:translateY(-2px);
+  }
+  .btn-ghost{
+    background:rgba(255,255,255,.06);color:var(--t2);
+    border:1.5px solid rgba(255,255,255,.1);
+  }
+  .btn-ghost:hover{
+    background:rgba(255,255,255,.1);color:var(--t);
+    border-color:rgba(108,99,255,.4);
+  }
+
+  @keyframes fadeUp{
+    from{opacity:0;transform:translateY(18px)}
+    to{opacity:1;transform:none}
+  }
+
+  /* Bottom logo */
+  .bottom-logo{
+    position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+    display:flex;align-items:center;gap:8px;
+    font-family:var(--disp);font-size:15px;font-weight:700;color:var(--t3);
+    text-decoration:none;opacity:.6;transition:opacity .2s;
+  }
+  .bottom-logo:hover{opacity:1;}
+  .logo-box{
+    width:26px;height:26px;border-radius:8px;
+    background:linear-gradient(135deg,var(--acc),var(--acc2));
+    display:flex;align-items:center;justify-content:center;
+    font-size:12px;font-weight:800;color:#fff;
+  }
+</style>
+</head>
+<body>
+<div class="glow"></div>
+<div class="page">
+
+  <div class="icon-wrap">📄</div>
+
+  <div class="num-404">404</div>
+
+  <h1 class="title">Page Not Found</h1>
+  <p class="sub">
+    The page you are looking for doesn't exist or has been moved.
+    Source files are protected and cannot be accessed directly.
+  </p>
+
+  <div class="btn-row">
+    <a href="/" class="btn btn-primary">🏠 Return Home</a>
+    <a href="contact.html" class="btn btn-ghost">📩 Contact Support</a>
+  </div>
+
+</div>
+
+<!-- Bottom logo -->
+<a href="/" class="bottom-logo">
+  <div class="logo-box" id="logoLetter">M</div>
+  <span id="logoName">My Website</span>
+</a>
+
+<script>
+// Apply site name if config is accessible
+try {
+  // Try to read from parent/sibling context
+  var cfg = window.SITE_CONFIG;
+  if (cfg) {
+    document.getElementById('logoLetter').textContent = cfg.letter || 'M';
+    document.getElementById('logoName').textContent   = cfg.name   || 'My Website';
+    document.title = cfg.name + ' — Page Not Found';
+  }
+} catch(e) {}
+</script>
+</body>
+</html>

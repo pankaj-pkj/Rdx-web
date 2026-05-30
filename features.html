@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SITENAME — Features</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+<style>
+.features-page { background:#f7f7ff; min-height:100vh; padding-top:64px; }
+.feat-hero { background:#06060f; padding:80px 5% 64px; text-align:center; position:relative; overflow:hidden; }
+.feat-hero .hero-glow { top:-80px; }
+.feat-hero h1 { color:#eeeeff; margin-top:10px; }
+.feat-hero p  { color:#8888aa; margin:12px auto 0; }
+.stats-strip {
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+  background:#fff; border-bottom:1px solid rgba(0,0,0,.07);
+}
+.stats-strip-item { padding:22px 16px; text-align:center; border-right:1px solid rgba(0,0,0,.07); }
+.stats-strip-item:last-child { border-right:none; }
+.ssv { font-family:var(--disp); font-size:26px; font-weight:900; color:var(--acc); }
+.ssl { font-size:11px; color:#aaa; margin-top:3px; text-transform:uppercase; letter-spacing:.8px; }
+.api-block {
+  background:linear-gradient(135deg,#0d0d1e,#0a0a18);
+  border-radius:22px; padding:32px 28px; margin:0 5% 48px;
+  display:grid; grid-template-columns:1fr 1fr; gap:32px; align-items:center;
+}
+@media(max-width:680px){ .api-block{grid-template-columns:1fr} }
+.code-box {
+  background:rgba(0,0,0,.5); border:1px solid rgba(255,255,255,.07);
+  border-radius:14px; padding:20px; font-family:var(--mono);
+  font-size:12.5px; line-height:1.9; overflow-x:auto; color:#a78bfa;
+}
+.c-cmt { color:rgba(255,255,255,.28); }
+.c-key { color:#b0a8ff; }
+.c-str { color:#f6ad55; }
+.c-val { color:#00e5a0; }
+.c-cursor { display:inline-block; width:7px; height:13px; background:var(--acc); animation:blink 1.1s steps(1) infinite; vertical-align:text-bottom; }
+.tl-wrap { max-width:580px; margin:0 auto; padding:0 5% 60px; }
+.tl { border-left:2px solid #e0e0ff; padding-left:28px; }
+.tl-item { position:relative; padding-bottom:28px; }
+.tl-item::before { content:''; position:absolute; left:-35px; top:3px; width:14px; height:14px; border-radius:50%; border:2.5px solid var(--acc); background:#f7f7ff; }
+.tl-item:last-child::before { border-color:var(--grn); }
+.tl-title { font-family:var(--disp); font-size:16px; font-weight:700; color:#0d0d1a; margin-bottom:5px; }
+.tl-desc  { font-size:14px; color:#777; line-height:1.65; }
+</style>
+</head>
+<body>
+
+<nav id="navbar">
+  <a href="index.html" class="nav-logo"><div class="logo-box"><span class="site-letter">M</span></div><span class="site-name">My Website</span></a>
+  <div class="nav-links">
+    <a href="features.html" style="color:var(--acc)">Features</a><a href="pricing.html">Pricing</a>
+    <a href="market.html">Market</a><a href="faq.html">FAQ</a><a href="contact.html">Contact</a>
+  </div>
+  <div class="nav-actions" id="navActions"></div>
+  <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+</nav>
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<div class="drawer" id="siteDrawer">
+  <div class="drawer-head"><a href="index.html" class="nav-logo"><div class="logo-box"><span class="site-letter">M</span></div><span class="site-name">My Website</span></a><button class="drawer-close" id="drawerClose">✕</button></div>
+  <div class="drawer-links">
+    <a href="index.html" class="drawer-link" onclick="closeDrawer()"><span class="drawer-link-icon">🏠</span>Home</a>
+    <a href="features.html" class="drawer-link active" onclick="closeDrawer()"><span class="drawer-link-icon">⚡</span>Features</a>
+    <a href="pricing.html" class="drawer-link" onclick="closeDrawer()"><span class="drawer-link-icon">💰</span>Pricing</a>
+    <a href="market.html" class="drawer-link" onclick="closeDrawer()"><span class="drawer-link-icon">🌐</span>Market</a>
+    <a href="faq.html" class="drawer-link" onclick="closeDrawer()"><span class="drawer-link-icon">❓</span>FAQ</a>
+    <a href="contact.html" class="drawer-link" onclick="closeDrawer()"><span class="drawer-link-icon">📩</span>Contact</a>
+  </div>
+  <div class="drawer-divider"></div>
+  <div class="drawer-section-label">🌍 Language</div>
+  <div class="lang-grid">
+    <button class="lang-btn active" data-lang="en" onclick="setLang('en')"><span class="lang-flag">🇺🇸</span><span class="lang-name">English</span></button>
+    <button class="lang-btn" data-lang="es" onclick="setLang('es')"><span class="lang-flag">🇪🇸</span><span class="lang-name">Español</span></button>
+    <button class="lang-btn" data-lang="zh" onclick="setLang('zh')"><span class="lang-flag">🇨🇳</span><span class="lang-name">中文</span></button>
+  </div>
+  <div class="drawer-divider"></div>
+  <div class="drawer-toggle-row"><span class="drawer-toggle-label">✨ Spring Effect</span><button class="toggle-switch on" id="springToggle"></button></div>
+  <div class="drawer-toggle-row"><span class="drawer-toggle-label">🌙 Light Theme</span><button class="toggle-switch" id="themeToggle"></button></div>
+  <div class="drawer-divider"></div>
+  <div class="drawer-footer" id="mobileActions"></div>
+</div>
+
+<div class="features-page">
+  <!-- Hero (dark) -->
+  <div class="feat-hero">
+    <div class="hero-glow"></div>
+    <div class="grid-overlay"></div>
+    <div style="position:relative;z-index:1">
+      <div class="sec-label" style="background:rgba(108,99,255,.15);border-color:rgba(108,99,255,.3);color:#b0a8ff">Platform Features</div>
+      <h1 class="sec-title" style="color:#eeeeff;margin-top:10px">Everything Built to<br><span class="grad">Perform at Scale</span></h1>
+      <p class="sec-sub" style="color:#8888aa;margin:12px auto 0;max-width:460px">Designed from the ground up for developers who need reliable, blazing-fast API token infrastructure.</p>
+    </div>
+  </div>
+
+  <!-- Stats strip -->
+  <div class="stats-strip">
+    <div class="stats-strip-item"><div class="ssv">&lt;100ms</div><div class="ssl">Avg Response</div></div>
+    <div class="stats-strip-item"><div class="ssv">99.9%</div><div class="ssl">Uptime SLA</div></div>
+    <div class="stats-strip-item"><div class="ssv">50+</div><div class="ssl">Countries</div></div>
+    <div class="stats-strip-item"><div class="ssv">24/7</div><div class="ssl">Support</div></div>
+    <div class="stats-strip-item"><div class="ssv">AES-256</div><div class="ssl">Encryption</div></div>
+  </div>
+
+  <!-- Feature cards -->
+  <div class="feat-section" style="background:#f7f7ff;padding-top:56px">
+    <div class="feat-header">
+      <div class="sec-label">Core Features</div>
+      <h2 class="sec-title" style="color:#0d0d1a;margin-top:10px">Why developers choose<br><span class="site-name" style="background:linear-gradient(90deg,#6c63ff,#38bdf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">My Website</span></h2>
+    </div>
+    <div class="feat-cards-grid">
+      <div class="feat-card-new purple reveal"><div class="feat-icon-box purple">⚡</div><h3>Lightning Fast Delivery</h3><p>Sub-100ms average response via our globally distributed edge network. Industry-leading speeds across all regions.</p><span class="feat-tag purple">&lt;100ms avg</span><span class="feat-tag purple">CDN Powered</span></div>
+      <div class="feat-card-new blue reveal reveal-delay-1"><div class="feat-icon-box blue">🛡️</div><h3>Military-Grade Security</h3><p>Every request encrypted end-to-end with AES-256. Zero-knowledge architecture. Strict zero-log policy enforced.</p><span class="feat-tag blue">AES-256</span><span class="feat-tag blue">TLS 1.3</span></div>
+      <div class="feat-card-new green wide reveal reveal-delay-2">
+        <div class="uptime-inner">
+          <div class="uptime-text">
+            <div class="feat-icon-box green">🌐</div>
+            <h3>99.9% Uptime SLA</h3>
+            <p>Redundant server clusters across 5 geographic regions. Automatic failover keeps you always online. Backed by SLA.</p>
+            <span class="uptime-badge">● All Systems Operational</span>
+          </div>
+          <div class="uptime-bars">
+            <div class="uptime-bar" style="height:24px"></div><div class="uptime-bar" style="height:34px"></div>
+            <div class="uptime-bar" style="height:20px"></div><div class="uptime-bar" style="height:36px"></div>
+            <div class="uptime-bar" style="height:28px"></div><div class="uptime-bar" style="height:36px"></div>
+            <div class="uptime-bar" style="height:22px"></div><div class="uptime-bar" style="height:36px"></div>
+          </div>
+        </div>
+      </div>
+      <div class="feat-card-new orange reveal"><div class="feat-icon-box orange">🔒</div><h3>Private &amp; Secure</h3><p>Your data never leaves our encrypted servers. Multi-layer protection. No third-party sharing. GDPR compliant.</p><span class="feat-tag orange">No Logs</span><span class="feat-tag orange">Anonymous</span></div>
+      <div class="feat-card-new pink reveal reveal-delay-1"><div class="feat-icon-box pink">🔌</div><h3>Easy Integration</h3><p>REST API + WebSocket support. Comprehensive docs, Postman collection, SDKs for Python, Node, PHP, Go, Dart.</p><span class="feat-tag purple">REST API</span><span class="feat-tag blue">WebSocket</span></div>
+      <div class="feat-card-new blue reveal reveal-delay-2"><div class="feat-icon-box blue">🚀</div><h3>Instant Activation</h3><p>API credentials delivered within 60 seconds of payment confirmation via Email or Telegram. No manual steps.</p><span class="feat-tag green">Auto-Delivery</span><span class="feat-tag blue">60 sec</span></div>
+    </div>
+  </div>
+
+  <!-- API section (dark card) -->
+  <div style="background:#f0f0ff;padding:0 0 56px">
+    <div class="api-block reveal">
+      <div>
+        <div class="sec-label" style="background:rgba(108,99,255,.15);border-color:rgba(108,99,255,.3);color:#b0a8ff;margin-bottom:16px">Developer Integration</div>
+        <h2 style="font-family:var(--disp);font-size:26px;font-weight:800;color:#eeeeff;letter-spacing:-.5px;margin-bottom:12px">Simple REST API &amp; WebSocket</h2>
+        <p style="font-size:14px;color:#8888aa;line-height:1.8;margin-bottom:18px">Get up and running in minutes with comprehensive documentation, SDKs, and ready-to-use code examples.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <span style="background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.25);color:#a78bfa;padding:5px 12px;border-radius:100px;font-size:12px;font-weight:600">REST API</span>
+          <span style="background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.22);color:#38bdf8;padding:5px 12px;border-radius:100px;font-size:12px;font-weight:600">WebSocket</span>
+          <span style="background:rgba(0,229,160,.1);border:1px solid rgba(0,229,160,.2);color:#00e5a0;padding:5px 12px;border-radius:100px;font-size:12px;font-weight:600">Python SDK</span>
+          <span style="background:rgba(0,229,160,.1);border:1px solid rgba(0,229,160,.2);color:#00e5a0;padding:5px 12px;border-radius:100px;font-size:12px;font-weight:600">Node.js SDK</span>
+        </div>
+      </div>
+      <div class="code-box">
+<span class="c-cmt">// Request a token in 3 lines</span>
+<span class="c-key">const</span> res = <span class="c-key">await</span> fetch(
+  <span class="c-str">'https://api.domain.com/v1/token'</span>,
+  { headers: {
+    <span class="c-str">'Authorization'</span>: <span class="c-str">'Bearer sk_live_••••'</span>,
+    <span class="c-str">'X-Country'</span>: <span class="c-str">'IN'</span>
+  }}
+);
+<span class="c-key">const</span> { token, ms } = <span class="c-key">await</span> res.json();
+
+<span class="c-cmt">// ✓ Token: 430577  ·  87ms</span>
+console.<span class="c-val">log</span>(token); <span class="c-cursor"></span>
+      </div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="tl-wrap">
+      <div style="text-align:center;margin-bottom:32px">
+        <div class="sec-label">How it works</div>
+        <h2 class="sec-title" style="color:#0d0d1a;margin-top:10px">Live in 3 Steps</h2>
+      </div>
+      <div class="tl">
+        <div class="tl-item reveal"><div class="tl-title">1. Choose Your Plan</div><div class="tl-desc">Select from 5 flexible plans — 3-day sprints to full-year enterprise. All include unlimited API access.</div></div>
+        <div class="tl-item reveal"><div class="tl-title">2. Pay with Crypto</div><div class="tl-desc">Send crypto to the provided wallet. Our system auto-detects payment on the blockchain in real time.</div></div>
+        <div class="tl-item reveal"><div class="tl-title">3. Receive Credentials &amp; Go Live</div><div class="tl-desc">Your API key is delivered to your email or Telegram within 60 seconds. Plug in and start making requests immediately.</div></div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div style="padding:0 5%;max-width:640px;margin:0 auto">
+      <div class="cta-card reveal">
+        <div class="cta-offer-badge"><span class="dot"></span> Get Started Today</div>
+        <h2>Ready to build?</h2>
+        <p>Get your API credentials in under 60 seconds.</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <a href="quick-purchase.html" class="btn btn-primary btn-lg">Buy Now →</a>
+          <a href="pricing.html" class="btn btn-white btn-lg">View Pricing</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="foot-grid">
+    <div><div class="foot-logo-name"><div class="logo-box" style="width:32px;height:32px;font-size:14px"><span class="site-letter">M</span></div><span class="site-name">My Website</span></div><p class="foot-tagline site-tagline"></p></div>
+    <div><h4>Product</h4><a href="features.html">Features</a><a href="pricing.html">Pricing</a><a href="faq.html">FAQ</a></div>
+    <div><h4>Legal</h4><a href="#">Terms</a><a href="#">Privacy</a></div>
+    <div><h4>Support</h4><a href="contact.html">Contact</a><a href="#">Docs</a></div>
+  </div>
+  <div class="foot-bottom"><span class="site-copyright"></span><span style="font-size:12px;color:#bbb">Crypto only · 50+ countries</span></div>
+</footer>
+
+<div id="toast" class="toast"></div>
+<script src="security.js"></script>
+<script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SITENAME — Login</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<script>/* Theme init */if(localStorage.getItem("__sw_theme")==="light")document.body.classList.add("light-theme");if(localStorage.getItem("__sw_spring")==="off")document.body.classList.add("no-spring");</script>
+<div class="auth-page">
+  <div class="auth-glow"></div>
+
+  <a href="index.html" class="auth-logo-link">
+    <div class="logo-box"><span class="site-letter">M</span></div>
+    <span class="site-name">My Website</span>
+  </a>
+
+  <div class="auth-box">
+    <h2 class="auth-title">Welcome back</h2>
+    <p class="auth-subtitle">Don't have an account? <a href="register.html">Sign Up</a></p>
+
+    <!-- Error -->
+    <div class="auth-error" id="loginErr"><span>⚠</span><span id="loginErrMsg"></span></div>
+
+    <!-- Form -->
+    <div id="loginForm">
+      <label class="auth-label">Email or Username</label>
+      <input class="auth-input" type="text" id="loginUser" placeholder="you@example.com" autocomplete="username" oninput="document.getElementById('loginErr').classList.remove('show')">
+
+      <div class="auth-row-label">
+        <label class="auth-label" style="margin:0">Password</label>
+        <a href="#" class="auth-forgot" onclick="handleForgot(event)">Forgot password?</a>
+      </div>
+      <div class="auth-input-wrap">
+        <input class="auth-input" type="password" id="loginPass" placeholder="Your password" autocomplete="current-password" style="padding-right:42px" oninput="document.getElementById('loginErr').classList.remove('show')">
+        <button type="button" class="auth-pw-toggle" id="eyeBtn" onclick="togglePw('loginPass','eyeBtn')">👁</button>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px">
+        <input type="checkbox" id="rememberMe" style="accent-color:var(--acc);width:16px;height:16px">
+        <label for="rememberMe" style="font-size:13px;color:#8888aa;cursor:pointer">Remember me</label>
+      </div>
+
+      <button class="auth-submit" id="loginBtn" onclick="submitLogin()">
+        <div class="btn-spinner" id="loginSpin"></div>
+        <span id="loginLabel">Continue →</span>
+      </button>
+
+      <div class="auth-protect-note">
+        🔒 Secured with AES-256 encryption
+      </div>
+    </div>
+
+    <!-- Success -->
+    <div class="form-success" id="loginSuccess">
+      <div class="success-icon">✅</div>
+      <h4>Login Successful!</h4>
+      <p>Welcome back to <strong class="site-name">My Website</strong>. Redirecting...</p>
+    </div>
+  </div>
+
+  <p class="auth-footer-text">
+    New here? <a href="register.html">Create a free account →</a>
+  </p>
+  <p class="auth-footer-text" style="margin-top:8px">
+    <a href="quick-purchase.html" style="color:#55556a">Or continue as Guest →</a>
+  </p>
+</div>
+
+<div id="toast" class="toast"></div>
+<script src="security.js"></script>
+<script src="main.js"></script>
+<script>
+// Redirect if already logged in
+if (Auth.isIn()) {
+  const red = new URLSearchParams(window.location.search).get('redirect') || 'index.html';
+  window.location.href = red;
+}
+
+function togglePw(inputId, btnId) {
+  const inp = document.getElementById(inputId);
+  const btn = document.getElementById(btnId);
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  btn.textContent = inp.type === 'password' ? '👁' : '🙈';
+}
+
+function handleForgot(e) {
+  e.preventDefault();
+  const email = document.getElementById('loginUser').value.trim();
+  if (!email) { showAuthErr('Enter your email first.'); return; }
+  showToast('Password reset link sent to ' + email, 'success');
+}
+
+function showAuthErr(msg) {
+  const el = document.getElementById('loginErr');
+  document.getElementById('loginErrMsg').textContent = msg;
+  el.classList.add('show');
+}
+
+function submitLogin() {
+  const user = document.getElementById('loginUser').value.trim();
+  const pass = document.getElementById('loginPass').value;
+  document.getElementById('loginErr').classList.remove('show');
+
+  if (!user) { showAuthErr('Please enter your email or username.'); return; }
+  if (!pass)  { showAuthErr('Please enter your password.'); return; }
+  if (pass.length < 4) { showAuthErr('Password is too short.'); return; }
+
+  // Loading
+  const btn  = document.getElementById('loginBtn');
+  const spin = document.getElementById('loginSpin');
+  const lbl  = document.getElementById('loginLabel');
+  btn.disabled = true; spin.style.display = 'inline-block'; lbl.style.opacity = '.6';
+
+  setTimeout(() => {
+    btn.disabled = false; spin.style.display = 'none'; lbl.style.opacity = '1';
+
+    // Check stored user
+    const stored = localStorage.getItem('__sw_reg_' + user.toLowerCase()) ||
+                   localStorage.getItem('__sw_reg_' + user.toLowerCase().split('@')[0]);
+    let userData;
+    if (stored) {
+      const reg = JSON.parse(stored);
+      if (reg.password !== pass) { showAuthErr('Incorrect password. Please try again.'); return; }
+      userData = { username: reg.username, email: reg.email, uid: reg.uid };
+    } else {
+      // Demo mode — accept any credentials
+      userData = {
+        username: user.includes('@') ? user.split('@')[0] : user,
+        email: user.includes('@') ? user : user + '@demo.com',
+        uid: 'demo_' + Date.now()
+      };
+    }
+    Auth.save(userData);
+    document.getElementById('loginForm').style.display = 'none';
+    document.getElementById('loginSuccess').style.display = 'block';
+    showToast('Logged in successfully! 🎉', 'success');
+    const redirect = new URLSearchParams(window.location.search).get('redirect') || 'index.html';
+    setTimeout(() => window.location.href = redirect, 1600);
+  }, 1400);
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Enter') submitLogin(); });
+</script>
+</body>
+</html>

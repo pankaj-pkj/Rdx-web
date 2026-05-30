@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SITENAME — Marketplace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+<style>
+.mkt-page { background:#f0f0ff; min-height:100vh; padding-top:64px; }
+.mkt-hero  { background:#06060f; padding:72px 5% 56px; text-align:center; position:relative; overflow:hidden; }
+.mkt-body  { padding:28px 5% 80px; max-width:1200px; margin:0 auto; }
+.mkt-toolbar { display:flex; gap:10px; flex-wrap:wrap; align-items:center; background:#fff; border:1px solid rgba(0,0,0,.07); border-radius:18px; padding:14px 18px; margin-bottom:18px; box-shadow:0 2px 12px rgba(0,0,0,.05); }
+.mkt-search { flex:1; min-width:180px; padding:10px 14px; background:#f7f7ff; border:1.5px solid rgba(0,0,0,.08); border-radius:12px; font-family:var(--sans); font-size:14px; color:#0d0d1a; outline:none; transition:border-color .2s; }
+.mkt-search:focus { border-color:var(--acc); }
+.mkt-search::placeholder { color:#bbb; }
+.mkt-select { padding:10px 14px; background:#f7f7ff; border:1.5px solid rgba(0,0,0,.08); border-radius:12px; font-family:var(--sans); font-size:14px; color:#555; outline:none; cursor:pointer; transition:border-color .2s; }
+.mkt-select:focus { border-color:var(--acc); }
+.mkt-view-btns { display:flex; gap:3px; background:#f7f7ff; border:1px solid rgba(0,0,0,.08); border-radius:10px; padding:3px; }
+.mvbtn { width:32px; height:32px; border-radius:8px; border:none; background:none; font-size:15px; cursor:pointer; transition:all .2s; color:#aaa; display:flex; align-items:center; justify-content:center; }
+.mvbtn.active { background:var(--acc); color:#fff; }
+.mkt-cats { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+.mkt-cat-pill { padding:8px 18px; border-radius:100px; font-size:13px; font-weight:600; cursor:pointer; border:1.5px solid rgba(0,0,0,.09); color:#666; background:#fff; transition:all .22s; }
+.mkt-cat-pill:hover { border-color:rgba(108,99,255,.4); color:var(--acc); }
+.mkt-cat-pill.active { background:var(--acc); border-color:var(--acc); color:#fff; }
+.mkt-results { font-size:13px; color:#aaa; margin-bottom:14px; }
+.mkt-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px; }
+.mkt-grid.list-view { grid-template-columns:1fr; }
+.mkt-card {
+  background:#fff; border:1.5px solid rgba(0,0,0,.07); border-radius:20px; padding:22px;
+  cursor:pointer; transition:all .3s var(--spring); position:relative; overflow:hidden;
+  display:flex; flex-direction:column;
+}
+.mkt-card:hover { border-color:rgba(108,99,255,.3); transform:translateY(-3px); box-shadow:0 12px 40px rgba(108,99,255,.1); }
+.mkt-card.featured { border-color:rgba(108,99,255,.35); box-shadow:0 0 30px rgba(108,99,255,.08); }
+.mkt-card-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+.mkt-ctag { font-size:11px; font-weight:700; padding:4px 10px; border-radius:7px; letter-spacing:.3px; }
+.mkt-ctag-purple { background:rgba(108,99,255,.12); color:var(--acc); }
+.mkt-ctag-green  { background:rgba(0,197,122,.1);   color:var(--grn); }
+.mkt-ctag-orange { background:rgba(251,146,60,.12); color:#ea580c; }
+.mkt-ctag-blue   { background:rgba(56,189,248,.12); color:#0ea5e9; }
+.mkt-rating { font-size:12px; color:#f59e0b; }
+.mkt-title { font-family:var(--disp); font-size:17px; font-weight:800; color:#0d0d1a; margin-bottom:6px; line-height:1.2; }
+.mkt-desc  { font-size:13px; color:#666; line-height:1.65; flex:1; }
+.mkt-tags  { display:flex; flex-wrap:wrap; gap:5px; margin-top:10px; }
+.mkt-tag   { font-size:11px; padding:3px 9px; border-radius:6px; background:#f5f5ff; border:1px solid rgba(0,0,0,.07); color:#888; font-family:var(--mono); }
+.mkt-footer { display:flex; justify-content:space-between; align-items:center; margin-top:16px; padding-top:14px; border-top:1px solid rgba(0,0,0,.06); }
+.mkt-price  { font-family:var(--disp); font-size:24px; font-weight:900; color:var(--acc); }
+.mkt-buy-btn { padding:9px 18px; border-radius:100px; background:var(--acc); color:#fff; border:none; font-size:13px; font-weight:700; cursor:pointer; transition:all .22s; font-family:var(--sans); }
+.mkt-buy-btn:hover { background:var(--acc-h); transform:scale(1.04); }
+.mkt-verified { font-size:11px; color:#aaa; margin-top:6px; }
+.mkt-verified span { color:var(--grn); }
+.no-results { text-align:center; padding:60px 20px; color:#aaa; grid-column:1/-1; }
+/* Modal */
+.mkt-modal { position:fixed; inset:0; z-index:600; display:flex; align-items:center; justify-content:center; padding:16px; opacity:0; pointer-events:none; transition:opacity .3s; }
+.mkt-modal.open { opacity:1; pointer-events:all; }
+.mkt-modal-bg { position:absolute; inset:0; background:rgba(0,0,0,.55); backdrop-filter:blur(6px); }
+.mkt-modal-box { position:relative; z-index:1; background:#fff; border-radius:24px; padding:28px; max-width:500px; width:100%; max-height:90vh; overflow-y:auto; transform:scale(.92) translateY(20px); transition:transform .35s var(--spring); }
+.mkt-modal.open .mkt-modal-box { transform:scale(1) translateY(0); }
+.mkt-modal-close { position:absolute; top:14px; right:14px; width:30px; height:30px; border-radius:50%; background:#f5f5ff; border:none; font-size:16px; cursor:pointer; color:#888; display:flex; align-items:center; justify-content:center; transition:all .2s; }
+.mkt-modal-close:hover { background:#ebebff; color:var(--acc); }
+</style>
+</head>
+<body>
+
+<nav id="navbar">
+  <a href="index.html" class="nav-logo"><div class="logo-box"><span class="site-letter">M</span></div><span class="site-name">My Website</span></a>
+  <div class="nav-links">
+    <a href="features.html">Features</a><a href="pricing.html">Pricing</a>
+    <a href="market.html" style="color:var(--acc)">Market</a><a href="faq.html">FAQ</a><a href="contact.html">Contact</a>
+  </div>
+  <div class="nav-actions" id="navActions"></div>
+  <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+</nav>
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<div class="drawer" id="siteDrawer">
+  <div class="drawer-head"><a href="index.html" class="nav-logo"><div class="logo-box"><span class="site-letter">M</span></div><span class="site-name">My Website</span></a><button class="drawer-close" id="drawerClose">✕</button></div>
+  <div class="drawer-links">
+    <a href="index.html" class="drawer-link" onclick="closeDrawer()"><span class="drawer-link-icon">🏠</span>Home</a>
+    <a href="features.html" class="drawer-link" onclick="closeDrawer()"><span class="drawer-link-icon">⚡</span>Features</a>
+    <a href="pricing.html" class="drawer-link" onclick="closeDrawer()"><span class="drawer-link-icon">💰</span>Pricing</a>
+    <a href="market.html" class="drawer-link active" onclick="closeDrawer()"><span class="drawer-link-icon">🌐</span>Market</a>
+    <a href="faq.html" class="drawer-link" onclick="closeDrawer()"><span class="drawer-link-icon">❓</span>FAQ</a>
+    <a href="contact.html" class="drawer-link" onclick="closeDrawer()"><span class="drawer-link-icon">📩</span>Contact</a>
+  </div>
+  <div class="drawer-divider"></div>
+  <div class="drawer-section-label">🌍 Language</div>
+  <div class="lang-grid">
+    <button class="lang-btn active" data-lang="en" onclick="setLang('en')"><span class="lang-flag">🇺🇸</span><span class="lang-name">English</span></button>
+    <button class="lang-btn" data-lang="es" onclick="setLang('es')"><span class="lang-flag">🇪🇸</span><span class="lang-name">Español</span></button>
+    <button class="lang-btn" data-lang="zh" onclick="setLang('zh')"><span class="lang-flag">🇨🇳</span><span class="lang-name">中文</span></button>
+  </div>
+  <div class="drawer-divider"></div>
+  <div class="drawer-toggle-row"><span class="drawer-toggle-label">✨ Spring Effect</span><button class="toggle-switch on" id="springToggle"></button></div>
+  <div class="drawer-toggle-row"><span class="drawer-toggle-label">🌙 Light Theme</span><button class="toggle-switch" id="themeToggle"></button></div>
+  <div class="drawer-divider"></div>
+  <div class="drawer-footer" id="mobileActions"></div>
+</div>
+
+<div class="mkt-page">
+  <!-- Hero -->
+  <div class="mkt-hero">
+    <div class="hero-glow"></div>
+    <div class="grid-overlay"></div>
+    <div style="position:relative;z-index:1">
+      <div class="sec-label" style="background:rgba(108,99,255,.15);border-color:rgba(108,99,255,.3);color:#b0a8ff">Marketplace</div>
+      <h1 class="sec-title" style="color:#eeeeff;margin-top:10px">API Token Service Plans</h1>
+      <p class="sec-sub" style="color:#8888aa;margin:10px auto 0">Browse, filter and activate the perfect plan for your project</p>
+      <div style="display:flex;justify-content:center;gap:28px;flex-wrap:wrap;margin-top:24px">
+        <span style="font-size:14px;color:#6666aa;display:flex;align-items:center;gap:6px"><span style="color:var(--acc)">⚡</span>&lt;100ms Response</span>
+        <span style="font-size:14px;color:#6666aa;display:flex;align-items:center;gap:6px"><span style="color:var(--grn2)">●</span>99.9% Uptime</span>
+        <span style="font-size:14px;color:#6666aa;display:flex;align-items:center;gap:6px"><span>🌍</span>50+ Countries</span>
+        <span style="font-size:14px;color:#6666aa;display:flex;align-items:center;gap:6px"><span>24/7</span>Support</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="mkt-body">
+    <!-- Toolbar -->
+    <div class="mkt-toolbar">
+      <input class="mkt-search" type="text" placeholder="🔍  Search plans, features…" id="mktSearch" oninput="doFilter()">
+      <select class="mkt-select" id="mktCountry" onchange="onCountryChange()">
+        <option value="">🌍 All Countries</option>
+        <option value="in">🇮🇳 India</option>
+        <option value="us">🇺🇸 United States</option>
+        <option value="gb">🇬🇧 United Kingdom</option>
+        <option value="ae">🇦🇪 UAE</option>
+        <option value="de">🇩🇪 Germany</option>
+        <option value="ca">🇨🇦 Canada</option>
+        <option value="au">🇦🇺 Australia</option>
+        <option value="br">🇧🇷 Brazil</option>
+        <option value="jp">🇯🇵 Japan</option>
+        <option value="sg">🇸🇬 Singapore</option>
+        <option value="ng">🇳🇬 Nigeria</option>
+        <option value="pk">🇵🇰 Pakistan</option>
+        <option value="ph">🇵🇭 Philippines</option>
+        <option value="bd">🇧🇩 Bangladesh</option>
+        <option value="tr">🇹🇷 Turkey</option>
+        <option value="other">🌐 Other (50+ total)</option>
+      </select>
+      <select class="mkt-select" id="mktSort" onchange="doFilter()">
+        <option value="">Sort: Default</option>
+        <option value="price-asc">Price: Low → High</option>
+        <option value="price-desc">Price: High → Low</option>
+        <option value="rating">Highest Rated</option>
+      </select>
+      <div class="mkt-view-btns">
+        <button class="mvbtn active" id="gridBtn" onclick="setView('grid')" title="Grid">⊞</button>
+        <button class="mvbtn" id="listBtn" onclick="setView('list')" title="List">☰</button>
+      </div>
+    </div>
+
+    <!-- Category pills -->
+    <div class="mkt-cats">
+      <div class="mkt-cat-pill active" data-cat="all">All Plans</div>
+      <div class="mkt-cat-pill" data-cat="starter">Starter</div>
+      <div class="mkt-cat-pill" data-cat="popular">🔥 Popular</div>
+      <div class="mkt-cat-pill" data-cat="professional">Professional</div>
+      <div class="mkt-cat-pill" data-cat="enterprise">Enterprise</div>
+      <div class="mkt-cat-pill" data-cat="addon">Add-ons</div>
+    </div>
+
+    <div class="mkt-results">Showing <strong id="mktCount">9</strong> plans</div>
+    <div class="mkt-grid" id="mktGrid"></div>
+  </div>
+</div>
+
+<footer>
+  <div class="foot-grid">
+    <div><div class="foot-logo-name"><div class="logo-box" style="width:32px;height:32px;font-size:14px"><span class="site-letter">M</span></div><span class="site-name">My Website</span></div><p class="foot-tagline site-tagline"></p></div>
+    <div><h4>Product</h4><a href="features.html">Features</a><a href="pricing.html">Pricing</a><a href="faq.html">FAQ</a></div>
+    <div><h4>Legal</h4><a href="#">Terms</a><a href="#">Privacy</a></div>
+    <div><h4>Support</h4><a href="contact.html">Contact</a><a href="#">Docs</a></div>
+  </div>
+  <div class="foot-bottom"><span class="site-copyright"></span><span style="font-size:12px;color:#bbb">Crypto only · 50+ countries</span></div>
+</footer>
+
+<!-- Modal -->
+<div class="mkt-modal" id="mktModal">
+  <div class="mkt-modal-bg" onclick="closeModal()"></div>
+  <div class="mkt-modal-box">
+    <button class="mkt-modal-close" onclick="closeModal()">✕</button>
+    <div id="mktModalContent"></div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+<script src="security.js"></script>
+<script src="main.js"></script>
+<script>
+const PLANS_DATA = [
+  { id:'3day',    cat:'starter',      title:'3-Day API Access',         desc:'Perfect for short-term projects. Full REST + WebSocket access with unlimited token requests for 72 hours.',       price:45,   rating:4.2, rv:128, tags:['REST','WebSocket','Instant'],    hot:false, isNew:false },
+  { id:'7day',    cat:'starter',      title:'7-Day API Access',         desc:'A full week of developer service. Great for integration sprints, campaigns, or short-term automation.',           price:79,   rating:4.4, rv:214, tags:['REST','WebSocket','Priority'],   hot:false, isNew:false },
+  { id:'15day',   cat:'popular',      title:'15-Day API Access',        desc:'Our most popular plan. Two weeks of unlimited service with priority support and live analytics.',                  price:139,  rating:4.9, rv:587, tags:['REST','WebSocket','Analytics'],  hot:true,  isNew:false },
+  { id:'30day',   cat:'professional', title:'30-Day Developer Plan',    desc:'A full month of professional API access. Includes WebSocket streams, usage dashboard, dedicated endpoint.',       price:249,  rating:4.8, rv:342, tags:['REST','WebSocket','Dashboard'],  hot:false, isNew:false },
+  { id:'oneyear', cat:'enterprise',   title:'1-Year Enterprise Bundle', desc:'Full-year access. Dedicated account manager, custom SLA, white-glove onboarding, red-line support.',             price:2490, rating:5.0, rv:89,  tags:['REST','WebSocket','SLA','SDK'],  hot:false, isNew:false },
+  { id:'country', cat:'addon',        title:'Extra Country Pack',       desc:'Unlock 10 additional regional token pools. Attach to any active subscription instantly.',                          price:19,   rating:4.3, rv:67,  tags:['Regions','Instant'],             hot:false, isNew:true  },
+  { id:'ws',      cat:'addon',        title:'WebSocket Upgrade',        desc:'Add real-time WebSocket delivery to any Starter plan. Activates within seconds of purchase.',                     price:29,   rating:4.5, rv:91,  tags:['WebSocket','Upgrade'],           hot:false, isNew:false },
+  { id:'dash',    cat:'addon',        title:'Analytics Dashboard',      desc:'Full request logs, latency graphs, success rate tracking and exportable CSV reports.',                            price:49,   rating:4.7, rv:153, tags:['Analytics','Logs','Export'],    hot:false, isNew:true  },
+  { id:'sdk',     cat:'professional', title:'Developer SDK Bundle',     desc:'15-Day plan + official SDKs for Python, Node, PHP, Go and Dart. Includes Postman collection.',                   price:179,  rating:4.6, rv:205, tags:['SDK','Docs','15 Days'],         hot:false, isNew:true  },
+];
+
+const CAT_TAG = { starter:'starter', popular:'popular', professional:'professional', enterprise:'enterprise', addon:'addon' };
+const CAT_CLR = { starter:'mkt-ctag-blue', popular:'mkt-ctag-purple', professional:'mkt-ctag-green', enterprise:'mkt-ctag-green', addon:'mkt-ctag-orange' };
+const CAT_LBL = { starter:'Starter', popular:'🔥 Popular', professional:'Pro', enterprise:'Enterprise', addon:'Add-on' };
+
+let currentView = 'grid';
+let currentCat  = 'all';
+
+function stars(r) { return '★'.repeat(Math.floor(r)) + (r%1>=.5?'½':'') + '☆'.repeat(5-Math.floor(r)-(r%1>=.5?1:0)); }
+
+function renderCards(data) {
+  const grid = document.getElementById('mktGrid');
+  document.getElementById('mktCount').textContent = data.length;
+  if (!data.length) {
+    grid.innerHTML = '<div class="no-results"><div style="font-size:40px;margin-bottom:12px">🔍</div><p style="font-weight:600;font-size:16px">No plans found</p><p style="margin-top:6px;font-size:14px">Try a different search or filter.</p></div>';
+    return;
+  }
+  grid.innerHTML = data.map((p,i) => `
+    <div class="mkt-card reveal${p.hot?' featured':''}" style="animation-delay:${i*0.06}s" onclick="openModal('${p.id}')">
+      ${p.hot ? '<div style="position:absolute;top:12px;right:12px;background:linear-gradient(90deg,var(--acc),#38bdf8);color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:100px">⭐ Featured</div>' : ''}
+      ${p.isNew ? '<div style="position:absolute;top:12px;right:12px;background:linear-gradient(90deg,var(--grn),#38bdf8);color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:100px">✦ New</div>' : ''}
+      <div class="mkt-card-top">
+        <span class="mkt-ctag ${CAT_CLR[p.cat]}">${CAT_LBL[p.cat]}</span>
+        <span class="mkt-rating" title="${p.rv} reviews">${stars(p.rating)} ${p.rating}</span>
+      </div>
+      <div class="mkt-title">${p.title}</div>
+      <div class="mkt-desc">${p.desc}</div>
+      <div class="mkt-tags">${p.tags.map(t=>`<span class="mkt-tag">${t}</span>`).join('')}</div>
+      <div class="mkt-verified"><span>✓</span> Verified · Instant Delivery</div>
+      <div class="mkt-footer">
+        <div class="mkt-price">$${p.price.toLocaleString()}</div>
+        <div style="display:flex;gap:7px">
+          <button class="mkt-buy-btn" style="background:transparent;border:1.5px solid rgba(0,0,0,.12);color:#333" onclick="event.stopPropagation();openModal('${p.id}')">Details</button>
+          <a href="quick-purchase.html?plan=${p.id}" class="mkt-buy-btn" onclick="event.stopPropagation()">Buy Now</a>
+        </div>
+      </div>
+    </div>`).join('');
+
+  // Re-observe
+  grid.querySelectorAll('.reveal:not(.in)').forEach(el => {
+    const o = new IntersectionObserver(entries => { entries.forEach(e => { if(e.isIntersecting){e.target.classList.add('in');o.unobserve(e.target);}});}, {threshold:.05});
+    o.observe(el);
+  });
+}
+
+function doFilter() {
+  const q    = document.getElementById('mktSearch').value.toLowerCase();
+  const sort = document.getElementById('mktSort').value;
+  let res = PLANS_DATA.filter(p => {
+    const catOk = currentCat === 'all' || p.cat === currentCat;
+    const qOk   = !q || p.title.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q) || p.tags.some(t=>t.toLowerCase().includes(q));
+    return catOk && qOk;
+  });
+  if (sort === 'price-asc')  res.sort((a,b)=>a.price-b.price);
+  if (sort === 'price-desc') res.sort((a,b)=>b.price-a.price);
+  if (sort === 'rating')     res.sort((a,b)=>b.rating-a.rating);
+  renderCards(res);
+}
+
+function setView(v) {
+  currentView = v;
+  document.getElementById('mktGrid').className = 'mkt-grid' + (v==='list'?' list-view':'');
+  document.getElementById('gridBtn').classList.toggle('active', v==='grid');
+  document.getElementById('listBtn').classList.toggle('active', v==='list');
+}
+
+document.querySelectorAll('.mkt-cat-pill').forEach(pill => {
+  pill.addEventListener('click', () => {
+    document.querySelectorAll('.mkt-cat-pill').forEach(p=>p.classList.remove('active'));
+    pill.classList.add('active');
+    currentCat = pill.dataset.cat;
+    doFilter();
+  });
+});
+
+function onCountryChange() {
+  const sel = document.getElementById('mktCountry');
+  const opt = sel.options[sel.selectedIndex];
+  if (sel.value) showToast('Showing plans for ' + opt.text.replace(/^.*? /,''), 'success');
+  doFilter();
+}
+
+function openModal(id) {
+  const p = PLANS_DATA.find(x=>x.id===id);
+  if (!p) return;
+  const incl = ['Unlimited API requests','AES-256 encryption','Priority 24/7 support','Instant credential delivery','REST API access','WebSocket events'];
+  document.getElementById('mktModalContent').innerHTML = `
+    <div style="margin-bottom:18px">
+      <span class="mkt-ctag ${CAT_CLR[p.cat]}" style="margin-bottom:10px;display:inline-block">${CAT_LBL[p.cat]}</span>
+      <h2 style="font-family:var(--disp);font-size:22px;font-weight:800;color:#0d0d1a;margin-bottom:4px">${p.title}</h2>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <span class="mkt-rating">${stars(p.rating)} ${p.rating} <span style="color:#bbb">(${p.rv} reviews)</span></span>
+        <span style="font-family:var(--disp);font-size:28px;font-weight:900;color:var(--acc)">$${p.price.toLocaleString()}</span>
+      </div>
+      <p style="font-size:14px;color:#666;line-height:1.75;margin-bottom:16px">${p.desc}</p>
+    </div>
+    <div style="background:#f7f7ff;border-radius:14px;padding:16px;margin-bottom:16px">
+      <p style="font-size:11px;color:#aaa;text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:10px">What's included</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px">
+        ${incl.map(f=>`<div style="font-size:13px;color:#333;display:flex;align-items:center;gap:7px"><span style="width:20px;height:20px;border-radius:50%;border:2px solid var(--grn);color:var(--grn);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">✓</span>${f}</div>`).join('')}
+      </div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:18px">
+      ${p.tags.map(t=>`<span class="mkt-tag">${t}</span>`).join('')}
+    </div>
+    <div style="display:flex;gap:10px">
+      <a href="quick-purchase.html?plan=${p.id}" class="btn btn-primary" style="flex:1;justify-content:center;padding:13px">Buy Now — $${p.price.toLocaleString()}</a>
+      <button onclick="closeModal()" class="btn btn-white" style="padding:13px 18px">Later</button>
+    </div>`;
+  document.getElementById('mktModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  document.getElementById('mktModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
+
+document.addEventListener('DOMContentLoaded', () => { doFilter(); });
+</script>
+</body>
+</html>

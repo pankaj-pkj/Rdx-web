@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SITENAME — Complete Payment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<script>/* Theme init */if(localStorage.getItem("__sw_theme")==="light")document.body.classList.add("light-theme");if(localStorage.getItem("__sw_spring")==="off")document.body.classList.add("no-spring");</script>
+
+<!-- TOP NAV -->
+<div class="pay-topnav">
+  <a href="index.html" class="pay-topnav-logo">
+    <div class="logo-box"><span class="site-letter">M</span></div>
+    <span class="site-name">My Website</span>
+  </a>
+  <a href="javascript:history.back()" class="pay-topnav-back" title="Back">←</a>
+</div>
+
+<!-- MAIN PAGE -->
+<div class="pay-page-light">
+<div class="pay-main">
+
+  <!-- Badge -->
+  <div class="pay-badge-pill">💳 Crypto Payment</div>
+
+  <!-- Title -->
+  <h1 class="pay-big-title">Complete Your Payment</h1>
+  <p class="pay-big-sub">Select your preferred cryptocurrency to continue</p>
+
+  <!-- Countdown -->
+  <div class="pay-countdown-pill" id="countdownPill">
+    <span class="pay-countdown-icon">🕐</span>
+    <span class="pay-countdown-time" id="countdownTime">0:59:59</span>
+    <span class="pay-countdown-label">remaining</span>
+  </div>
+
+  <!-- 4-Step stepper -->
+  <div class="pay-stepper-new" id="payStepperEl">
+    <div class="pst-item active" id="psti1">
+      <div class="pst-circle" id="pstc1">1</div>
+      <div class="pst-label">Select Crypto</div>
+    </div>
+    <div class="pst-line" id="pstl1"></div>
+    <div class="pst-item" id="psti2">
+      <div class="pst-circle" id="pstc2">2</div>
+      <div class="pst-label">Send Payment</div>
+    </div>
+    <div class="pst-line" id="pstl2"></div>
+    <div class="pst-item" id="psti3">
+      <div class="pst-circle" id="pstc3">3</div>
+      <div class="pst-label">Confirmation</div>
+    </div>
+    <div class="pst-line" id="pstl3"></div>
+    <div class="pst-item" id="psti4">
+      <div class="pst-circle" id="pstc4">4</div>
+      <div class="pst-label">Complete</div>
+    </div>
+  </div>
+
+  <!-- ══ PANEL 1: SELECT CRYPTO ══ -->
+  <div class="pay-panel active" id="panel1">
+    <div class="pay-select-card">
+      <h2 class="pay-select-title">Select Payment Method</h2>
+      <p class="pay-select-sub">Choose your preferred cryptocurrency</p>
+      <div class="crypto-cards-grid" id="cryptoGrid"></div>
+    </div>
+  </div>
+
+  <!-- ══ PANEL 2: PAYMENT DETAILS ══ -->
+  <div class="pay-panel" id="panel2">
+
+    <!-- Payment Details card -->
+    <div class="pay-detail-card">
+      <div class="pay-detail-head">
+        <div class="pay-detail-coin-fallback" id="detailCoinIcon" style="background:#627eea">⧫</div>
+        <div class="pay-detail-head-text">
+          <h3>Payment Details</h3>
+          <p>Send your payment to the address below</p>
+        </div>
+      </div>
+      <span class="pay-detail-network-badge np-eth" id="detailNetBadge">ERC-20</span>
+      <div class="pay-detail-divider"></div>
+
+      <!-- Amount -->
+      <div class="pay-amount-card">
+        <div class="pay-amount-top">
+          <div class="pay-amount-top-label">
+            <div class="pay-amount-dot"></div>
+            Amount to Send
+          </div>
+          <div class="pay-auto-badge">
+            <div class="pay-auto-spin"></div>
+            Auto-checking...
+          </div>
+        </div>
+        <div class="pay-amount-big" id="cryptoAmount">0.02114781 <span id="cryptoSymbol">Eth</span></div>
+        <div class="pay-amount-warn">
+          <span class="pay-amount-warn-icon">⚠</span>
+          Send exactly this amount for automatic confirmation
+        </div>
+        <div class="pay-monitor-pill">
+          ↻ Payment is being monitored automatically every 15 seconds. No need to refresh the page.
+        </div>
+      </div>
+
+      <!-- Address -->
+      <div class="pay-addr-label-new">
+        <div class="pay-addr-dot"></div>
+        Payment Address
+      </div>
+      <div class="pay-addr-box-new">
+        <div class="pay-addr-text-new" id="walletAddr">0xf12532dcd66d2990371D0546E70910bBAA2bBd82</div>
+        <button class="pay-addr-copy-btn" id="copyAddrBtn" onclick="copyAddr()" title="Copy">⧉</button>
+      </div>
+
+      <!-- QR section (hidden until clicked) -->
+      <div id="qrSection" style="display:none;margin-bottom:14px;">
+        <div class="pay-qr-section">
+          <div class="pay-qr-img-wrap">
+            <img id="qrImg" src="" alt="QR Code" width="180" height="180">
+          </div>
+          <button class="pay-scan-btn">
+            <span class="pay-scan-dot"></span>
+            <span id="scanBtnText">Scan with your wallet</span>
+          </button>
+          <p class="pay-scan-note">Or copy the address manually above</p>
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <button class="pay-qr-btn" id="qrBtn" onclick="toggleQR()">
+        <span>▦</span> <span id="qrBtnText">Generate QR Code</span>
+      </button>
+      <button class="pay-status-btn" onclick="checkPayment()">
+        ↻ Check Payment Status
+      </button>
+    </div>
+
+    <!-- How to Complete -->
+    <div class="pay-howto-card">
+      <div class="pay-howto-header">
+        <div class="pay-howto-header-icon">📋</div>
+        <h3>How to Complete Payment</h3>
+      </div>
+      <div class="pay-howto-steps" id="howToSteps"></div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="pay-faq-card">
+      <div class="pay-faq-header">
+        <div class="pay-faq-header-icon">?</div>
+        <h3>Frequently Asked<br>Questions</h3>
+      </div>
+      <div id="payFaqList"></div>
+    </div>
+
+    <div style="text-align:center;padding:8px 0 16px;">
+      <a href="contact.html" style="font-size:14px;color:#aaa;text-decoration:underline;">Need help? Contact Support</a>
+    </div>
+  </div>
+
+  <!-- ══ PANEL 3: CHECKING ══ -->
+  <div class="pay-panel" id="panel3">
+    <div style="background:#fff;border-radius:20px;border:1px solid rgba(0,0,0,.07);padding:28px;">
+      <div class="pay-checking-overlay" style="display:block;padding:20px 0;">
+        <div class="pay-checking-ring"></div>
+        <h3>Verifying Payment</h3>
+        <p>Scanning the blockchain for your transaction.<br>This usually takes 10–30 seconds.</p>
+        <div style="margin-top:20px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:13px;color:#bbb;">
+          <div style="width:12px;height:12px;border:2px solid rgba(108,99,255,.3);border-top-color:var(--acc);border-radius:50%;animation:spin .7s linear infinite;"></div>
+          Checking every 15 seconds...
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PANEL 4: FAILED ══ -->
+  <div class="pay-panel" id="panel4">
+    <div class="pay-failed-card" style="display:block;">
+      <div class="pay-fail-x">✕</div>
+      <h3>Payment Not Detected</h3>
+      <p>We could not verify your transaction on the blockchain. This can happen for several reasons:</p>
+      <div class="pay-fail-list">
+        <div class="pay-fail-li">Transaction not yet broadcast to the network</div>
+        <div class="pay-fail-li">Incorrect amount sent (must be exact)</div>
+        <div class="pay-fail-li">Wrong blockchain network selected</div>
+        <div class="pay-fail-li">Network congestion — retry in a few minutes</div>
+        <div class="pay-fail-li">Payment sent to wrong address</div>
+      </div>
+      <div class="pay-fail-btns">
+        <button class="pay-retry-btn" onclick="retryPayment()">↻ Try Again</button>
+        <a href="contact.html" style="display:block;padding:13px;border-radius:100px;border:1.5px solid rgba(0,0,0,.12);font-size:15px;font-weight:600;color:#333;text-align:center;text-decoration:none;font-family:var(--sans);transition:all .2s;" onmouseover="this.style.borderColor='var(--acc)';this.style.color='var(--acc)'" onmouseout="this.style.borderColor='rgba(0,0,0,.12)';this.style.color='#333'">
+          📩 Contact Support
+        </a>
+        <a href="quick-purchase.html" style="display:block;padding:13px;border-radius:100px;border:1.5px solid rgba(0,0,0,.12);font-size:15px;font-weight:600;color:#333;text-align:center;text-decoration:none;font-family:var(--sans);transition:all .2s;" onmouseover="this.style.borderColor='var(--acc)';this.style.color='var(--acc)'" onmouseout="this.style.borderColor='rgba(0,0,0,.12)';this.style.color='#333'">
+          New Order
+        </a>
+      </div>
+      <p style="font-size:12px;color:#ccc;margin-top:16px;line-height:1.65;">
+        Already sent? Contact support with your Transaction ID (TXID) for manual verification.
+      </p>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<div id="toast" class="toast"></div>
+<script src="security.js"></script>
+<script src="main.js"></script>
+<script>
+/* ── CRYPTO DATA ──────────────────────────────────────────── */
+const CRYPTOS = [
+  { id:'btc',   name:'Bitcoin',     ticker:'BTC',   network:'BTC',    netClass:'np-btc',  coinClass:'lb-btc',  symbol:'₿',  time:'~10 min', rate:0.0000128,  addr:'1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa' },
+  { id:'eth',   name:'Ethereum',    ticker:'ETH',   network:'ERC-20', netClass:'np-eth',  coinClass:'lb-eth',  symbol:'⧫',  time:'~2 min',  rate:0.000384,   addr:'0xf12532dcd66d2990371D0546E70910bBAA2bBd82' },
+  { id:'ltc',   name:'Litecoin',    ticker:'LTC',   network:'LTC',    netClass:'np-ltc',  coinClass:'lb-ltc',  symbol:'Ł',  time:'~2.5 min',rate:0.0112,     addr:'LdP8Qox1VAhCzLJNqrr74YovaWYyNBUWvL' },
+  { id:'xmr',   name:'Monero',      ticker:'XMR',   network:'XMR',    netClass:'np-xmr',  coinClass:'lb-xmr',  symbol:'ɱ',  time:'~20 min', rate:0.00657,    addr:'48k8njQjH3N32Ub4DmGqEZrPY3pqJ7JbzV5yEoN9P2L4' },
+  { id:'ton',   name:'TON',         ticker:'TON',   network:'TON',    netClass:'np-ton',  coinClass:'lb-ton',  symbol:'◆',  time:'~5 sec',  rate:0.213,      addr:'EQD2NmD_lH5f5u1Kj3KfGyTvhZSX0Eg6qp2a5IQUKXxOG3f' },
+  { id:'usdt',  name:'USDT',        ticker:'USDT',  network:'TRC-20', netClass:'np-trc20',coinClass:'lb-usdt', symbol:'₮',  time:'~1 min',  rate:1.0,        addr:'TN1LhjL1j3iFKBRozdCFUZMQFRd3GXHJ1R' },
+  { id:'usdt2', name:'USDT',        ticker:'USDT',  network:'BEP-20', netClass:'np-bep20',coinClass:'lb-usdt', symbol:'₮',  time:'~30 sec', rate:1.0,        addr:'0x742d35Cc6634C0532925a3b8D4C9Ed7f4e6B9E2' },
+  { id:'bnb',   name:'BNB',         ticker:'BNB',   network:'BEP-20', netClass:'np-bep20',coinClass:'lb-bnb',  symbol:'◈',  time:'~30 sec', rate:0.00215,    addr:'bnb1grpf0955h0ykzq3ar5nmum7y6gdfl6lxfn46h2' },
+  { id:'sol',   name:'Solana',      ticker:'SOL',   network:'SOL',    netClass:'np-sol',  coinClass:'lb-sol',  symbol:'◎',  time:'~1 sec',  rate:0.00648,    addr:'DRpbCBMxVnDK7maPM5tGv6MvB3v1sRMC86PZ8okm21hy' },
+  { id:'xrp',   name:'XRP',         ticker:'XRP',   network:'XRP',    netClass:'np-xrp',  coinClass:'lb-xrp',  symbol:'✕',  time:'~4 sec',  rate:1.215,      addr:'rN7n3473SaZBCG4dFL83w7PB9zNDKP5Sy' },
+];
+
+// Coin logo images using CryptoIcons CDN
+const COIN_LOGOS = {
+  btc:   'https://cryptologos.cc/logos/bitcoin-btc-logo.png',
+  eth:   'https://cryptologos.cc/logos/ethereum-eth-logo.png',
+  ltc:   'https://cryptologos.cc/logos/litecoin-ltc-logo.png',
+  xmr:   'https://cryptologos.cc/logos/monero-xmr-logo.png',
+  ton:   'https://cryptologos.cc/logos/toncoin-ton-logo.png',
+  usdt:  'https://cryptologos.cc/logos/tether-usdt-logo.png',
+  usdt2: 'https://cryptologos.cc/logos/tether-usdt-logo.png',
+  bnb:   'https://cryptologos.cc/logos/bnb-bnb-logo.png',
+  sol:   'https://cryptologos.cc/logos/solana-sol-logo.png',
+  xrp:   'https://cryptologos.cc/logos/xrp-xrp-logo.png',
+};
+
+// HOW-TO steps
+const HOWTO_STEPS = [
+  { cls:'step-orange', text: '💰 Send exactly <strong id="htAmount">the shown amount</strong> to the address above' },
+  { cls:'step-blue',   text: '⏱ Wait for blockchain confirmation (typically 1-10 minutes)' },
+  { cls:'step-purple', text: '🔍 Click "Check Payment Status" to verify your transaction' },
+  { cls:'step-green',  text: '🎉 Your access key will be delivered instantly after confirmation' },
+];
+
+// FAQ items
+const FAQ_ITEMS = [
+  { q:'How long does payment confirmation take?', a:'Confirmation times vary by cryptocurrency: Bitcoin ~10 min, Ethereum ~2 min, TON ~5 sec, USDT TRC-20 ~1 min. Times shown on each coin card.' },
+  { q:'What happens if I send the wrong amount?', a:'If you send an incorrect amount, please contact our support team immediately with your transaction hash. We will manually review and process your payment. Underpayments may require an additional payment to complete the order.' },
+  { q:'Can I get a refund?', a:'Refunds are available within 24 hours if you experience a technical issue on our end. Contact support with your order ID and transaction hash for a review.' },
+  { q:'Is my payment secure?', a:'Yes. All payments are processed directly on the blockchain. We never have access to your private keys or wallet. The address shown is a one-time order address.' },
+  { q:'What if my payment expires?', a:'If the 60-minute window expires, please create a new order. Expired order addresses will no longer be monitored. Contact support if you sent to an expired address.' },
+  { q:'Do you accept other payment methods?', a:'Currently we only accept cryptocurrency payments. We accept Bitcoin, Ethereum, Litecoin, Monero, TON, USDT, BNB, Solana, and XRP.' },
+];
+
+/* ── STATE ── */
+let currentStep   = 1;
+let selectedCoin  = null;
+let timerInterval = null;
+let qrVisible     = false;
+let checkAttempts = 0;
+
+/* ── INIT ── */
+document.addEventListener('DOMContentLoaded', () => {
+  applySiteName();
+
+  // Read URL params
+  const params   = new URLSearchParams(window.location.search);
+  const planId   = params.get('plan') || '15day';
+  const price    = parseFloat(params.get('price') || 139);
+
+  // Start countdown
+  startCountdown(3599);
+
+  // Build crypto grid
+  buildCryptoGrid();
+
+  // Build how-to
+  buildHowTo(price);
+
+  // Build FAQ
+  buildFAQ();
+});
+
+function buildCryptoGrid() {
+  const grid = document.getElementById('cryptoGrid');
+  grid.innerHTML = '';
+  CRYPTOS.forEach(c => {
+    const div = document.createElement('div');
+    div.className = 'cc-card reveal';
+    div.id = 'cc-' + c.id;
+    div.onclick = () => selectCoin(c);
+
+    const logoSrc = COIN_LOGOS[c.id];
+    div.innerHTML = `
+      <span class="cc-check" id="chk-${c.id}">✓</span>
+      <img class="cc-logo-img" src="${logoSrc}" alt="${c.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="cc-logo-fallback ${c.coinClass}" style="display:none">${c.symbol}</div>
+      <div class="cc-name">${c.name}</div>
+      <div class="cc-ticker">${c.ticker}</div>
+      <span class="cc-network-pill ${c.netClass}">${c.network}</span>
+      <div class="cc-time">⚡ ${c.time}</div>`;
+    grid.appendChild(div);
+
+    // Animate in
+    setTimeout(() => div.classList.add('in'), 50);
+  });
+}
+
+function selectCoin(c) {
+  // Deselect all
+  document.querySelectorAll('.cc-card').forEach(el => el.classList.remove('selected'));
+  // Select this one
+  document.getElementById('cc-' + c.id).classList.add('selected');
+  selectedCoin = c;
+
+  // Short delay then go to step 2
+  setTimeout(() => {
+    setStep(2);
+    populatePaymentDetails(c);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, 350);
+}
+
+function populatePaymentDetails(c) {
+  const price = parseFloat(new URLSearchParams(window.location.search).get('price') || 139);
+  const amt   = c.rate < 0.001 ? (price * c.rate).toFixed(8) : (price * c.rate).toFixed(c.id.startsWith('usdt') ? 2 : 5);
+
+  // Icon
+  const iconEl = document.getElementById('detailCoinIcon');
+  const logoSrc = COIN_LOGOS[c.id];
+  iconEl.innerHTML = `<img src="${logoSrc}" style="width:56px;height:56px;border-radius:50%;object-fit:contain;background:#fff;" onerror="this.style.display='none'" alt="${c.name}">`;
+  iconEl.style.background = 'transparent';
+
+  // Network badge
+  const badge = document.getElementById('detailNetBadge');
+  badge.textContent = c.network;
+  badge.className = 'pay-detail-network-badge ' + c.netClass;
+
+  // Amount
+  document.getElementById('cryptoAmount').innerHTML = `${amt} <span id="cryptoSymbol">${c.ticker}</span>`;
+  document.getElementById('walletAddr').textContent = c.addr;
+
+  // Scan button
+  document.getElementById('scanBtnText').textContent = `Scan with your ${c.name} wallet`;
+
+  // How-to step 1 amount
+  const htAmt = document.getElementById('htAmount');
+  if (htAmt) htAmt.innerHTML = `<strong>${amt} ${c.ticker}</strong>`;
+
+  // QR reset
+  qrVisible = false;
+  document.getElementById('qrSection').style.display = 'none';
+  document.getElementById('qrBtn').classList.remove('ready');
+  document.getElementById('qrBtnText').textContent = 'Generate QR Code';
+
+  checkAttempts = 0;
+}
+
+function buildHowTo(price) {
+  const container = document.getElementById('howToSteps');
+  container.innerHTML = '';
+  HOWTO_STEPS.forEach((s, i) => {
+    const div = document.createElement('div');
+    div.className = 'pay-howto-step-item reveal';
+    div.innerHTML = `
+      <div class="pay-step-num-badge ${s.cls}">${i + 1}</div>
+      <div class="pay-howto-step-text">${s.text}</div>`;
+    container.appendChild(div);
+    setTimeout(() => div.classList.add('in'), 100 + i * 60);
+  });
+}
+
+function buildFAQ() {
+  const list = document.getElementById('payFaqList');
+  list.innerHTML = '';
+  FAQ_ITEMS.forEach((f, i) => {
+    const div = document.createElement('div');
+    div.className = 'pay-faq-item';
+    div.id = 'pfaq-' + i;
+    div.innerHTML = `
+      <button class="pay-faq-trigger" onclick="togglePayFaq(${i})">
+        <span>${f.q}</span>
+        <span class="pay-faq-chevron">⌄</span>
+      </button>
+      <div class="pay-faq-body">
+        <div class="pay-faq-inner">${f.a}</div>
+      </div>`;
+    list.appendChild(div);
+  });
+}
+
+function togglePayFaq(i) {
+  const item = document.getElementById('pfaq-' + i);
+  const wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.pay-faq-item.open').forEach(el => el.classList.remove('open'));
+  if (!wasOpen) item.classList.add('open');
+}
+
+/* ── STEP NAVIGATION ── */
+function setStep(n) {
+  currentStep = n;
+  for (let i = 1; i <= 4; i++) {
+    const item = document.getElementById('psti' + i);
+    const circ = document.getElementById('pstc' + i);
+    const line = document.getElementById('pstl' + i);
+    const panel = document.getElementById('panel' + i);
+
+    item.classList.remove('active','done');
+    if (i < n)  { item.classList.add('done'); circ.textContent = '✓'; }
+    if (i === n) { item.classList.add('active'); circ.textContent = i; }
+    if (i > n)   { circ.textContent = i; }
+    if (line) line.classList.toggle('done', i < n);
+    if (panel) panel.classList.toggle('active', i === n);
+  }
+}
+
+/* ── COPY ADDRESS ── */
+function copyAddr() {
+  const addr = document.getElementById('walletAddr').textContent;
+  const btn  = document.getElementById('copyAddrBtn');
+  navigator.clipboard?.writeText(addr).then(() => {
+    btn.classList.add('copied');
+    btn.textContent = '✓';
+    showToast('Address copied!', 'success');
+    setTimeout(() => { btn.classList.remove('copied'); btn.textContent = '⧉'; }, 2000);
+  }).catch(() => showToast('Copy failed', 'error'));
+}
+
+/* ── QR CODE ── */
+function toggleQR() {
+  qrVisible = !qrVisible;
+  const sec = document.getElementById('qrSection');
+  const btn = document.getElementById('qrBtn');
+  const txt = document.getElementById('qrBtnText');
+
+  if (qrVisible && selectedCoin) {
+    // Load QR from API
+    const addr = selectedCoin.addr;
+    document.getElementById('qrImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(addr)}&color=000000&bgcolor=ffffff&qzone=2`;
+    sec.style.display = 'block';
+    sec.style.animation = 'fadeUp 0.35s both';
+    btn.classList.add('ready');
+    txt.textContent = '▦ QR Code Ready';
+    showToast('QR code generated!', 'success');
+  } else {
+    sec.style.display = 'none';
+    btn.classList.remove('ready');
+    txt.textContent = '▦ Generate QR Code';
+  }
+}
+
+/* ── CHECK PAYMENT (always fails) ── */
+function checkPayment() {
+  checkAttempts++;
+  setStep(3);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  showToast('Scanning blockchain...', 'success');
+
+  // After 4 seconds → fail
+  setTimeout(() => {
+    setStep(4);
+    showToast('Payment not detected. Contact support.', 'error');
+  }, 4200);
+}
+
+function retryPayment() {
+  checkAttempts = 0;
+  setStep(2);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ── COUNTDOWN ── */
+function startCountdown(seconds) {
+  clearInterval(timerInterval);
+  const el   = document.getElementById('countdownTime');
+  const pill = document.getElementById('countdownPill');
+
+  timerInterval = setInterval(() => {
+    if (seconds <= 0) {
+      clearInterval(timerInterval);
+      el.textContent = 'EXPIRED';
+      pill.classList.add('urgent');
+      showToast('Order expired. Please create a new order.', 'error');
+      return;
+    }
+    seconds--;
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = seconds % 60;
+    el.textContent = h + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+    if (seconds < 300) pill.classList.add('urgent');
+  }, 1000);
+}
+</script>
+</body>
+</html>
