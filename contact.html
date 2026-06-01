@@ -4,10 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SITENAME — Contact</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css">
 <style>
 .contact-page { background:#f7f7ff; min-height:100vh; padding-top:64px; }
 .contact-hero { background:#06060f; padding:72px 5% 56px; text-align:center; position:relative; overflow:hidden; }
@@ -35,6 +32,44 @@
 /* Help card */
 .help-card { background:linear-gradient(135deg,#eeeeff,#e8e4ff 60%,#e0eeff); border-radius:22px; padding:28px; text-align:center; }
 </style>
+  <style>
+    /* Critical inline CSS - prevents FOUC and blur */
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{font-size:16px;scroll-behavior:smooth}
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+      background:#06060f;color:#eeeeff;
+      overflow-x:hidden;line-height:1.6;
+      -webkit-font-smoothing:antialiased;
+    }
+    /* Navbar instant render */
+    #navbar{
+      position:fixed;top:0;left:0;right:0;z-index:400;height:64px;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:0 5%;
+      background:rgba(6,6,15,.92);
+      backdrop-filter:blur(20px);
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .logo-box{
+      width:34px;height:34px;border-radius:10px;
+      background:linear-gradient(135deg,#6c63ff,#9f7aea);
+      display:flex;align-items:center;justify-content:center;
+      font-size:15px;font-weight:800;color:#fff;flex-shrink:0;
+    }
+    .nav-logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;color:#eeeeff;text-decoration:none;}
+    /* Hero text immediately visible */
+    #hero{
+      min-height:100vh;display:flex;flex-direction:column;
+      align-items:flex-start;justify-content:center;
+      padding:90px 5% 60px;background:#06060f;
+      position:relative;overflow:hidden;
+    }
+    #hero h1{font-size:clamp(38px,9vw,72px);font-weight:800;color:#eeeeff;letter-spacing:-2px;line-height:1.05;margin-bottom:18px;}
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
 

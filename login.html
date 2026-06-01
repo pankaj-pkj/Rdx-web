@@ -4,10 +4,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SITENAME — Login</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="style.css">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{font-size:16px}
+    body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;background:#06060f;color:#eeeeff;overflow-x:hidden;line-height:1.6;-webkit-font-smoothing:antialiased;}
+    #navbar{position:fixed;top:0;left:0;right:0;z-index:400;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 5%;background:rgba(6,6,15,.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.08);}
+    .logo-box{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#6c63ff,#9f7aea);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff;flex-shrink:0;}
+    .nav-logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;color:#eeeeff;text-decoration:none;}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:12px 24px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;border:none;white-space:nowrap;}
+    .btn-primary{background:#6c63ff;color:#fff;}
+    .hamburger{display:flex;flex-direction:column;gap:5px;background:none;border:none;padding:6px;cursor:pointer;}
+    .hamburger span{display:block;width:22px;height:2px;background:#eeeeff;border-radius:2px;}
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <script>/* Theme init */if(localStorage.getItem("__sw_theme")==="light")document.body.classList.add("light-theme");if(localStorage.getItem("__sw_spring")==="off")document.body.classList.add("no-spring");</script>

@@ -220,3 +220,18 @@
   } catch(e) {}
 
 })(window, document);
+
+/* ── GITHUB PAGES SOURCE PROTECTION ──────────────────────
+   .htaccess does not work on GitHub Pages (only on Apache).
+   This JS-based protection runs on every page load and
+   detects if a source file is being accessed directly. ── */
+;(function() {
+  var blocked = [
+    'style.css', 'main.js', 'firebase-config.js',
+    'security.js', 'robots.txt', 'README.md'
+  ];
+  var path = window.location.pathname.split('/').pop() || '';
+  if (blocked.indexOf(path) !== -1) {
+    window.location.replace('not-found.html');
+  }
+})();

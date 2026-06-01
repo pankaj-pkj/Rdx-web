@@ -1,3 +1,38 @@
+
+/* ── BLUR / FOUC FIX ──────────────────────────────────────
+   Make hero elements visible immediately without waiting
+   for IntersectionObserver (which causes blur on slow net)
+────────────────────────────────────────────────────────── */
+(function() {
+  // Mark hero reveal elements as visible immediately
+  function fixHeroBlur() {
+    var heroEls = document.querySelectorAll(
+      '#hero h1, #hero .hero-badge, #hero .hero-sub, ' +
+      '#hero .hero-btns, #hero .hero-stats, ' +
+      '#hero .hstat, #hero .hero-badge, ' +
+      '.iphone-outer, .phone-mockup-section'
+    );
+    heroEls.forEach(function(el) {
+      el.style.opacity = '1';
+      el.style.transform = 'none';
+      el.classList.add('in');
+    });
+  }
+  // Run immediately and after fonts load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', fixHeroBlur);
+  } else {
+    fixHeroBlur();
+  }
+  // Also run after all resources load
+  window.addEventListener('load', fixHeroBlur);
+})();
+
+/* ── NAV always visible ─────────────────────────────────── */
+(function() {
+  var nav = document.getElementById('navbar');
+  if (nav) { nav.style.opacity = '1'; nav.style.visibility = 'visible'; }
+})();
 /* ================================================================
    MAIN.JS — Shared Logic
    ✏  Edit SITE_CONFIG below to rebrand the entire site

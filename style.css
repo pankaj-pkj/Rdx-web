@@ -2,7 +2,7 @@
    SITE CONFIG — Change name in index.html SITE_CONFIG only
    Style by Codian Studio © 2026
 ========================================================== */
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap');
+/* Font loading handled in HTML for performance */
 
 /* ==========================================================
    CSS VARIABLES
@@ -2434,3 +2434,137 @@ body.light-theme .pricing-header .sec-sub   { color: #555577; }
 .p-progress, .p-progress-fill, .p-req-ms,
 .p-code-card, .p-code-label, .p-code-num,
 .p-dots, .p-dot { display: none !important; }
+
+/* =====================================================
+   BLUR FIX — Fonts load instantly, no invisible text
+===================================================== */
+
+/* Force system fonts as instant fallback BEFORE Google Fonts load */
+:root {
+  --sans: 'DM Sans', 'Helvetica Neue', Arial, sans-serif;
+  --disp: 'Syne', 'Helvetica Neue', Arial, sans-serif;
+  --mono: 'JetBrains Mono', 'Courier New', monospace;
+}
+
+/* Prevent invisible/blurred text during font loading */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* CRITICAL: Hero text must NEVER be invisible */
+/* Override reveal on hero section — always visible */
+#hero h1,
+#hero .hero-badge,
+#hero .hero-sub,
+#hero .hero-btns,
+#hero .hero-stats,
+#hero .hstat-val,
+#hero .hstat-lbl {
+  opacity: 1 !important;
+  transform: none !important;
+  animation-fill-mode: both;
+}
+
+/* Reduce animation delay — text visible faster */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px) scale(0.98);
+  transition:
+    opacity 0.5s ease,
+    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+.reveal.in {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Hero animate in immediately without waiting for scroll */
+@keyframes heroFadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: none; }
+}
+#hero h1         { animation: heroFadeIn 0.55s 0.05s both; }
+#hero .hero-badge{ animation: heroFadeIn 0.5s 0s both; }
+#hero .hero-sub  { animation: heroFadeIn 0.55s 0.12s both; }
+#hero .hero-btns { animation: heroFadeIn 0.55s 0.2s both; }
+#hero .hero-stats{ animation: heroFadeIn 0.55s 0.28s both; }
+
+/* Nav always visible — never hidden */
+#navbar, #navbar * { opacity: 1 !important; }
+
+/* Remove scale from reveal to prevent blur on mobile */
+@media (max-width: 768px) {
+  .reveal {
+    transform: translateY(16px);  /* no scale on mobile = no blur */
+  }
+  .reveal.in { transform: none; }
+}
+
+/* Font swap — show fallback font immediately */
+/* This is set via Google Fonts URL &display=swap parameter */
+/* Additionally force body text visible */
+body { opacity: 1 !important; }
+
+/* Fix backdrop-filter blur causing page blur on low-end devices */
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  * { animation-duration: 0.01ms !important; }
+}
+
+/* GitHub Pages specific — no .htaccess, but protect via JS */
+/* source-block overlay when someone views raw source */
+
+/* ═══════════════════════════════════════════════════
+   FINAL OVERRIDES — No blur, no invisible text
+═══════════════════════════════════════════════════ */
+
+/* Hero NEVER uses reveal delay - always visible */
+#hero .reveal,
+#hero h1,
+#hero p,
+#hero a,
+#hero .hero-badge,
+#hero .hero-sub,
+#hero .hero-btns,
+#hero .hero-stats,
+#hero .hstat,
+.phone-mockup-section,
+.iphone-outer {
+  opacity: 1 !important;
+  transform: none !important;
+  visibility: visible !important;
+}
+
+/* Navbar always fully visible */
+#navbar {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Prevent any filter:blur on page elements */
+body:not(.loaded) > :not(#navbar):not(.drawer):not(.drawer-overlay) {
+  /* Let all content be visible - remove any opacity hacks */
+}
+
+/* Mobile: disable scale animation to prevent blur */
+@media (max-width: 767px) {
+  .reveal {
+    transform: translateY(12px) !important;
+    /* No scale() = no blur on mobile */
+  }
+  .reveal.in {
+    transform: translateY(0) !important;
+  }
+}
+
+/* Add loaded class to body after fonts ready */
+body.fonts-loaded * {
+  font-display: swap;
+}
