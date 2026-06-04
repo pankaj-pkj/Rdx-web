@@ -1,0 +1,64 @@
+# ═══════════════════════════════════════════════════════════
+#  .htaccess — InfinityFree Compatible
+#  © 2026 Codian Studio (PXJ)
+#
+#  KEY FIX: style.css/main.js etc. load normally when
+#  requested by the browser from within an HTML page.
+#  ONLY BLOCKED when someone types the URL directly in
+#  the address bar (no Referer header from our domain).
+# ═══════════════════════════════════════════════════════════
+
+Options -Indexes
+DirectoryIndex index.html
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # ── 1. Force HTTPS (uncomment when SSL is active) ────────
+  # RewriteCond %{HTTPS} off
+  # RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # ── 2. Block /index.html — redirect to / ─────────────────
+  RewriteCond %{THE_REQUEST} /index\.html[\s?] [NC]
+  RewriteRule ^index\.html$ / [R=301,L]
+
+  # ── 3. BLOCK direct address-bar access to source files ────
+  #
+  # HOW IT WORKS:
+  # When browser loads style.css FROM an HTML page,
+  # it sends a Referer header (our own domain).
+  # When someone types /style.css in address bar → no Referer.
+  # We block ONLY the "no Referer" case.
+  #
+  # Block CSS files typed directly in browser
+  RewriteCond %{HTTP_REFERER} ^$ [OR]
+  RewriteCond %{HTTP_REFERER} !^https?://%{HTTP_HOST} [NC]
+  RewriteRule ^style\.css$ /not-found.html [R=302,L]
+
+  # Block JS files typed directly in browser
+  RewriteCond %{HTTP_REFERER} ^$ [OR]
+  RewriteCond %{HTTP_REFERER} !^https?://%{HTTP_HOST} [NC]
+  RewriteRule ^main\.js$ /not-found.html [R=302,L]
+
+  # ── 4. Always block sensitive config files ────────────────
+  # These should NEVER load — even from HTML pages
+  RewriteRule ^firebase-config\.js$ /not-found.html [R=302,L]
+  RewriteRule ^security\.js$ /not-found.html [R=302,L]
+  RewriteRule ^README\.md$ /not-found.html [R=302,L]
+  RewriteRule ^robots\.txt$ /not-found.html [R=302,L]
+
+  # ── 5. Block bad bots ─────────────────────────────────────
+  RewriteCond %{HTTP_USER_AGENT} (libwww-perl|nikto|scan|winhttp|clshttp|loader|python-requests) [NC]
+  RewriteRule .* - [F,L]
+
+</IfModule>
+
+# ── Block sensitive file extensions entirely ──────────────
+<FilesMatch "\.(env|git|sql|log|bak|sh|py|map|jsx|ts)$">
+  Order Allow,Deny
+  Deny from all
+</FilesMatch>
+
+# ── Custom error pages ────────────────────────────────────
+ErrorDocument 404 /not-found.html
+ErrorDocument 403 /not-found.html

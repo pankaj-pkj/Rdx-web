@@ -51,9 +51,9 @@
   --r-md:  16px;
   --r-lg:  22px;
   --r-xl:  28px;
-  --sans:  'DM Sans', sans-serif;
-  --disp:  'Syne', sans-serif;
-  --mono:  'JetBrains Mono', monospace;
+  --sans:  'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  --disp:  'Syne', -apple-system, BlinkMacSystemFont, 'Segoe UI', Georgia, sans-serif;
+  --mono:  'JetBrains Mono', 'Courier New', Courier, monospace;
   --shadow: 0 4px 24px rgba(108,99,255,0.15);
   --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
@@ -2040,27 +2040,8 @@ footer {
 /* FIX 3b: Hero always pure dark, all sections dark */
 #hero { background: #06060f !important; }
 
-/* FIX 4: Spring effect — proper spring keyframe & toggle behavior */
-:root {
-  --spring-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
-  --spring-soft:   cubic-bezier(0.22, 1, 0.36, 1);
-}
-.reveal {
-  opacity: 0;
-  transform: translateY(32px) scale(0.97);
-  transition:
-    opacity 0.6s var(--spring-soft),
-    transform 0.7s var(--spring-bounce);
-}
-.reveal.in {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-}
-/* Spring OFF */
-body.no-spring .reveal {
-  transition: opacity 0.5s ease, transform 0.5s ease !important;
-}
-body.no-spring .reveal { transform: translateY(20px) scale(1) !important; }
+
+body.no-spring .reveal { transform: translateY(20px) !important; }
 
 /* FIX 5: Full dark theme — unified colors, no half-white */
 /* Default = DARK everywhere */
@@ -2441,9 +2422,7 @@ body.light-theme .pricing-header .sec-sub   { color: #555577; }
 
 /* Force system fonts as instant fallback BEFORE Google Fonts load */
 :root {
-  --sans: 'DM Sans', 'Helvetica Neue', Arial, sans-serif;
-  --disp: 'Syne', 'Helvetica Neue', Arial, sans-serif;
-  --mono: 'JetBrains Mono', 'Courier New', monospace;
+
 }
 
 /* Prevent invisible/blurred text during font loading */
@@ -2467,15 +2446,7 @@ body.light-theme .pricing-header .sec-sub   { color: #555577; }
   animation-fill-mode: both;
 }
 
-/* Reduce animation delay — text visible faster */
-.reveal {
-  opacity: 0;
-  transform: translateY(20px) scale(0.98);
-  transition:
-    opacity 0.5s ease,
-    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-  will-change: opacity, transform;
-}
+
 .reveal.in {
   opacity: 1;
   transform: translateY(0) scale(1);
@@ -2554,17 +2525,80 @@ body:not(.loaded) > :not(#navbar):not(.drawer):not(.drawer-overlay) {
 }
 
 /* Mobile: disable scale animation to prevent blur */
-@media (max-width: 767px) {
-  .reveal {
-    transform: translateY(12px) !important;
-    /* No scale() = no blur on mobile */
-  }
-  .reveal.in {
-    transform: translateY(0) !important;
-  }
-}
+
 
 /* Add loaded class to body after fonts ready */
 body.fonts-loaded * {
   font-display: swap;
+}
+
+
+/* =====================================================
+   PERMANENT BLUR FIX — Do not edit
+   Root cause: scale() on mobile + Google Fonts FOIT
+===================================================== */
+
+/* 1. System font stack = text visible before Google Fonts load */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    'DM Sans', Helvetica, Arial, sans-serif;
+}
+
+/* 2. Single clean reveal — NO scale, NO blur */
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.5s ease, transform 0.55s cubic-bezier(0.22,1,0.36,1);
+}
+.reveal.in {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1.in { transition-delay: 0.08s; }
+.reveal-delay-2.in { transition-delay: 0.16s; }
+.reveal-delay-3.in { transition-delay: 0.24s; }
+.reveal-delay-4.in { transition-delay: 0.32s; }
+
+/* 3. Hero elements ALWAYS visible — never hidden by reveal */
+#hero h1,
+#hero .hero-badge,
+#hero .hero-sub,
+#hero .hero-btns,
+#hero .hero-stats,
+#hero .hstat,
+.iphone-outer,
+.phone-mockup-section,
+#navbar,
+#navbar * {
+  opacity: 1 !important;
+  transform: none !important;
+  visibility: visible !important;
+}
+
+/* 4. Hero own animation — fast, no blur */
+@keyframes hfadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+#hero .hero-badge { animation: hfadeUp 0.45s 0s    both; }
+#hero h1          { animation: hfadeUp 0.5s  0.06s both; }
+#hero .hero-sub   { animation: hfadeUp 0.5s  0.12s both; }
+#hero .hero-btns  { animation: hfadeUp 0.5s  0.18s both; }
+#hero .hero-stats { animation: hfadeUp 0.5s  0.24s both; }
+
+/* 5. Mobile — smaller translateY, no scale ever */
+@media (max-width: 768px) {
+  .reveal { transform: translateY(14px); }
+  .reveal.in { transform: none; }
+}
+
+/* 6. Reduced motion — instant display */
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .reveal.in { opacity: 1 !important; transform: none !important; transition: none !important; }
+  * { animation-duration: 0.01ms !important; }
+}
+
+/* 7. Spring ON/OFF */
+body.no-spring .reveal {
+  transition: opacity 0.4s ease, transform 0.4s ease !important;
 }
