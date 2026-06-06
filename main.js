@@ -204,6 +204,7 @@ if (marqueeEl) {
 /* ================================================================
    SPRING SCROLL REVEAL
 ================================================================ */
+// Reveal observer - opacity always 1, only animates translateY
 const revealObserver = new IntersectionObserver(entries => {
   entries.forEach(e => {
     if (e.isIntersecting) {
@@ -211,9 +212,16 @@ const revealObserver = new IntersectionObserver(entries => {
       revealObserver.unobserve(e.target);
     }
   });
-}, { threshold: 0.07, rootMargin: '0px 0px -40px 0px' });
+}, { threshold: 0.04, rootMargin: '0px 0px -20px 0px' });
 
 function observeReveal() {
+  // Mark all as 'in' after 2s regardless (failsafe)
+  setTimeout(() => {
+    document.querySelectorAll('.reveal:not(.in)').forEach(el => {
+      el.classList.add('in');
+    });
+  }, 2000);
+  // Normal observer
   document.querySelectorAll('.reveal:not(.in)').forEach(el => revealObserver.observe(el));
 }
 

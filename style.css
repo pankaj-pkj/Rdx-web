@@ -2456,3 +2456,145 @@ body.light-theme .pricing-header .sec-sub   { color: #555577; }
 body { opacity: 1 !important; }
 
 /* Fix backdrop-filter blur causing page blur on low-end devices */
+
+}
+
+/* GitHub Pages specific — no .htaccess, but protect via JS */
+/* source-block overlay when someone views raw source */
+
+
+
+
+/* =====================================================
+   PERMANENT BLUR FIX — Do not edit
+   Root cause: scale() on mobile + Google Fonts FOIT
+===================================================== */
+
+/* 1. System font stack = text visible before Google Fonts load */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    'DM Sans', Helvetica, Arial, sans-serif;
+}
+
+/* 2. Single clean reveal — NO scale, NO blur */
+
+
+.reveal-delay-1.in { transition-delay: 0.08s; }
+.reveal-delay-2.in { transition-delay: 0.16s; }
+.reveal-delay-3.in { transition-delay: 0.24s; }
+.reveal-delay-4.in { transition-delay: 0.32s; }
+
+/* 3. Hero elements ALWAYS visible — never hidden by reveal */
+
+
+/* 4. Hero own animation — fast, no blur */
+
+  to   { opacity: 1; transform: none; }
+}
+
+
+
+
+
+
+/* 5. Mobile — smaller translateY, no scale ever */
+
+
+/* 6. Reduced motion — instant display */
+
+
+/* 7. Spring ON/OFF */
+
+
+
+/* =====================================================
+   REVEAL ANIMATION SYSTEM — Permanent Blur-Free Fix
+   
+   KEY INSIGHT: opacity:0 = invisible = "blur" on slow
+   networks. We NEVER hide content with opacity.
+   
+   Instead: content is always visible (opacity:1),
+   we only animate position (translateY). 
+   Blur = impossible. Missing content = impossible.
+===================================================== */
+
+/* ── Base state: always visible ── */
+.reveal {
+  opacity: 1;
+  transform: translateY(28px);
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ── Triggered state ── */
+.reveal.in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Stagger delays ── */
+.reveal-delay-1 { transition-delay: 0.07s; }
+.reveal-delay-2 { transition-delay: 0.14s; }
+.reveal-delay-3 { transition-delay: 0.21s; }
+.reveal-delay-4 { transition-delay: 0.28s; }
+
+/* ── Spring effect ON ── */
+.reveal {
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ── Spring effect OFF ── */
+body.no-spring .reveal {
+  transition: transform 0.45s ease !important;
+}
+
+/* ── No motion preference ── */
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .reveal.in {
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* ── Hero: instant load, no translateY ── */
+#hero .hero-badge,
+#hero h1,
+#hero .hero-sub,
+#hero .hero-btns,
+#hero .hero-stats,
+#hero .hstat {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+/* ── Fix huge black gap below phone ── */
+/* Hero section should be just enough for content */
+#hero {
+  min-height: auto !important;
+  padding-bottom: 60px !important;
+}
+
+/* Phone mockup - no extra margin causing gap */
+.phone-mockup-section {
+  margin-top: 40px !important;
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* Features section - no top gap */
+.feat-section {
+  margin-top: 0 !important;
+  padding-top: 64px !important;
+}
+
+/* ── Navbar always visible ── */
+#navbar, #navbar * {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* ── Font rendering — no blur on text ── */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
