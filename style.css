@@ -135,21 +135,15 @@ ul { list-style: none; }
 /* ==========================================================
    SPRING REVEAL ANIMATIONS
 ========================================================== */
-.reveal {
-  opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.6s ease, transform 0.7s var(--spring);
-}
-.reveal.in { opacity: 1; transform: none; }
+
+
 .reveal-delay-1 { transition-delay: 0.1s; }
 .reveal-delay-2 { transition-delay: 0.18s; }
 .reveal-delay-3 { transition-delay: 0.26s; }
 .reveal-delay-4 { transition-delay: 0.34s; }
 
 /* Without spring (when spring effect is off) */
-body.no-spring .reveal {
-  transition: opacity 0.5s ease, transform 0.5s ease;
-}
+
 
 @keyframes fadeUp   { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:none} }
 @keyframes fadeIn   { from{opacity:0} to{opacity:1} }
@@ -2041,7 +2035,7 @@ footer {
 #hero { background: #06060f !important; }
 
 
-body.no-spring .reveal { transform: translateY(20px) !important; }
+
 
 /* FIX 5: Full dark theme — unified colors, no half-white */
 /* Default = DARK everywhere */
@@ -2434,45 +2428,27 @@ body.light-theme .pricing-header .sec-sub   { color: #555577; }
 
 /* CRITICAL: Hero text must NEVER be invisible */
 /* Override reveal on hero section — always visible */
-#hero h1,
-#hero .hero-badge,
-#hero .hero-sub,
-#hero .hero-btns,
-#hero .hero-stats,
-#hero .hstat-val,
-#hero .hstat-lbl {
-  opacity: 1 !important;
-  transform: none !important;
-  animation-fill-mode: both;
-}
 
 
-.reveal.in {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-}
+
+
 
 /* Hero animate in immediately without waiting for scroll */
 @keyframes heroFadeIn {
   from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: none; }
 }
-#hero h1         { animation: heroFadeIn 0.55s 0.05s both; }
+
 #hero .hero-badge{ animation: heroFadeIn 0.5s 0s both; }
-#hero .hero-sub  { animation: heroFadeIn 0.55s 0.12s both; }
-#hero .hero-btns { animation: heroFadeIn 0.55s 0.2s both; }
-#hero .hero-stats{ animation: heroFadeIn 0.55s 0.28s both; }
+
+
+
 
 /* Nav always visible — never hidden */
 #navbar, #navbar * { opacity: 1 !important; }
 
 /* Remove scale from reveal to prevent blur on mobile */
-@media (max-width: 768px) {
-  .reveal {
-    transform: translateY(16px);  /* no scale on mobile = no blur */
-  }
-  .reveal.in { transform: none; }
-}
+
 
 /* Font swap — show fallback font immediately */
 /* This is set via Google Fonts URL &display=swap parameter */
@@ -2480,125 +2456,3 @@ body.light-theme .pricing-header .sec-sub   { color: #555577; }
 body { opacity: 1 !important; }
 
 /* Fix backdrop-filter blur causing page blur on low-end devices */
-@media (prefers-reduced-motion: reduce) {
-  .reveal {
-    opacity: 1 !important;
-    transform: none !important;
-    transition: none !important;
-  }
-  * { animation-duration: 0.01ms !important; }
-}
-
-/* GitHub Pages specific — no .htaccess, but protect via JS */
-/* source-block overlay when someone views raw source */
-
-/* ═══════════════════════════════════════════════════
-   FINAL OVERRIDES — No blur, no invisible text
-═══════════════════════════════════════════════════ */
-
-/* Hero NEVER uses reveal delay - always visible */
-#hero .reveal,
-#hero h1,
-#hero p,
-#hero a,
-#hero .hero-badge,
-#hero .hero-sub,
-#hero .hero-btns,
-#hero .hero-stats,
-#hero .hstat,
-.phone-mockup-section,
-.iphone-outer {
-  opacity: 1 !important;
-  transform: none !important;
-  visibility: visible !important;
-}
-
-/* Navbar always fully visible */
-#navbar {
-  opacity: 1 !important;
-  visibility: visible !important;
-}
-
-/* Prevent any filter:blur on page elements */
-body:not(.loaded) > :not(#navbar):not(.drawer):not(.drawer-overlay) {
-  /* Let all content be visible - remove any opacity hacks */
-}
-
-/* Mobile: disable scale animation to prevent blur */
-
-
-/* Add loaded class to body after fonts ready */
-body.fonts-loaded * {
-  font-display: swap;
-}
-
-
-/* =====================================================
-   PERMANENT BLUR FIX — Do not edit
-   Root cause: scale() on mobile + Google Fonts FOIT
-===================================================== */
-
-/* 1. System font stack = text visible before Google Fonts load */
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    'DM Sans', Helvetica, Arial, sans-serif;
-}
-
-/* 2. Single clean reveal — NO scale, NO blur */
-.reveal {
-  opacity: 0;
-  transform: translateY(22px);
-  transition: opacity 0.5s ease, transform 0.55s cubic-bezier(0.22,1,0.36,1);
-}
-.reveal.in {
-  opacity: 1;
-  transform: translateY(0);
-}
-.reveal-delay-1.in { transition-delay: 0.08s; }
-.reveal-delay-2.in { transition-delay: 0.16s; }
-.reveal-delay-3.in { transition-delay: 0.24s; }
-.reveal-delay-4.in { transition-delay: 0.32s; }
-
-/* 3. Hero elements ALWAYS visible — never hidden by reveal */
-#hero h1,
-#hero .hero-badge,
-#hero .hero-sub,
-#hero .hero-btns,
-#hero .hero-stats,
-#hero .hstat,
-.iphone-outer,
-.phone-mockup-section,
-#navbar,
-#navbar * {
-  opacity: 1 !important;
-  transform: none !important;
-  visibility: visible !important;
-}
-
-/* 4. Hero own animation — fast, no blur */
-@keyframes hfadeUp {
-  from { opacity: 0; transform: translateY(14px); }
-  to   { opacity: 1; transform: none; }
-}
-#hero .hero-badge { animation: hfadeUp 0.45s 0s    both; }
-#hero h1          { animation: hfadeUp 0.5s  0.06s both; }
-#hero .hero-sub   { animation: hfadeUp 0.5s  0.12s both; }
-#hero .hero-btns  { animation: hfadeUp 0.5s  0.18s both; }
-#hero .hero-stats { animation: hfadeUp 0.5s  0.24s both; }
-
-/* 5. Mobile — smaller translateY, no scale ever */
-@media (max-width: 768px) {
-  .reveal { transform: translateY(14px); }
-  .reveal.in { transform: none; }
-}
-
-/* 6. Reduced motion — instant display */
-@media (prefers-reduced-motion: reduce) {
-  .reveal, .reveal.in { opacity: 1 !important; transform: none !important; transition: none !important; }
-  * { animation-duration: 0.01ms !important; }
-}
-
-/* 7. Spring ON/OFF */
-body.no-spring .reveal {
-  transition: opacity 0.4s ease, transform 0.4s ease !important;
-}
