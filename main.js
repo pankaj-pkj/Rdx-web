@@ -39,8 +39,8 @@
 ================================================================ */
 
 window.SITE_CONFIG = {
-  name:     'My Website',      // ← Change this ONE place — updates all pages
-  letter:   'M',               // ← Logo box letter
+  name:     'Fuc:k website',      // ← Change this ONE place — updates all pages
+  letter:   'F',               // ← Logo box letter
   tagline:  'Premium API Token Solutions',
   year:     '2026',
   tg:       '@support',
