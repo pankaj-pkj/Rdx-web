@@ -217,8 +217,7 @@ ul { list-style: none; }
   height: 64px;
   display: flex; align-items: center; justify-content: space-between;
   padding: 0 16px;
-  background: rgba(6,6,15,0.92);
-  backdrop-filter: blur(20px);
+  background: #08080f;
   border-bottom: 1px solid var(--d-bdr);
   transition: background 0.3s, box-shadow 0.3s;
 }
@@ -296,8 +295,15 @@ body.light-theme .hamburger { color: var(--l-t2); }
    MOBILE DRAWER (slides from RIGHT)
 ========================================================== */
 .drawer-overlay {
-  display: none; position: fixed; inset: 0; z-index: 500;
-  background: rgba(0,0,0,0.55); backdrop-filter: blur(4px);
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  background: rgba(0,0,0,0.6);
+}
+.drawer-overlay.open {
+  display: block;
+  animation: fadeIn 0.25s both;
 }
 .drawer-overlay.open { display: block; animation: fadeIn 0.25s both; }
 
@@ -965,7 +971,7 @@ footer {
   position: fixed; top: 0; left: 0; right: 0; z-index: 400;
   height: 64px; display: flex; align-items: center; justify-content: space-between;
   padding: 0 20px;
-  background: rgba(255,255,255,0.95); backdrop-filter: blur(16px);
+  background: rgba(255,255,255,0.95); 
   border-bottom: 1px solid rgba(0,0,0,0.07);
 }
 .qp-back-btn {
@@ -1361,7 +1367,7 @@ footer {
   position: sticky; top: 0; z-index: 200;
   height: 56px;
   background: rgba(255,255,255,0.95);
-  backdrop-filter: blur(16px);
+  
   border-bottom: 1px solid rgba(0,0,0,0.07);
   display: flex; align-items: center; justify-content: space-between;
   padding: 0 18px;
@@ -2170,8 +2176,7 @@ body.light-theme .pricing-header .sec-sub   { color: #555577; }
   .nav-links  { display: flex !important; }
   .hamburger  { display: none !important; }
 }
-/* Drawer should always work on all screen sizes */
-.drawer, .drawer-overlay { display: flex; }
+/* Drawer: overlay hidden by default, drawer slides in from right */
 
 /* =====================================================
    REAL iPHONE MOCKUP — Final Complete Styles
@@ -2215,9 +2220,7 @@ body.light-theme .pricing-header .sec-sub   { color: #555577; }
   position: relative;
   width: 260px;
   animation: iPhoneFloat 4.5s ease-in-out infinite;
-  filter:
-    drop-shadow(0 40px 70px rgba(0,0,0,0.6))
-    drop-shadow(0 0 50px rgba(108,99,255,0.22));
+  box-shadow: 0 40px 70px rgba(0,0,0,0.5), 0 0 40px rgba(108,99,255,0.18);
 }
 @keyframes iPhoneFloat {
   0%,100% { transform: translateY(0px); }
