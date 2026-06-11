@@ -39,8 +39,8 @@
 ================================================================ */
 
 window.SITE_CONFIG = {
-  name:     'Fuc:k website',      // ← Change this ONE place — updates all pages
-  letter:   'F',               // ← Logo box letter
+  name:     'My Website',      // ← Change this ONE place — updates all pages
+  letter:   'M',               // ← Logo box letter
   tagline:  'Premium API Token Solutions',
   year:     '2026',
   tg:       '@support',
@@ -258,15 +258,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   });
 });
 
-/* ── DOM ready ── */
-document.addEventListener('DOMContentLoaded', () => {
-  applySiteName();
-  refreshNav();
-  observeReveal();
-  // Restore stored language
-  const storedLang = localStorage.getItem('__sw_lang') || 'en';
-  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === storedLang));
-});
+
 
 /* =====================================================
    FIXES — Spring, Theme, Drawer on all screens
@@ -283,22 +275,7 @@ document.addEventListener('DOMContentLoaded', () => {
 })();
 
 // Spring toggle sync on load
-document.addEventListener('DOMContentLoaded', function() {
-  var springBtn = document.getElementById('springToggle');
-  var themeBtn  = document.getElementById('themeToggle');
-
-  if (springBtn) {
-    var springOn = localStorage.getItem('__sw_spring') !== 'off';
-    springBtn.classList.toggle('on', springOn);
-    if (!springOn) document.body.classList.add('no-spring');
-
-    springBtn.addEventListener('click', function() {
-      var isOn = springBtn.classList.toggle('on');
-      localStorage.setItem('__sw_spring', isOn ? 'on' : 'off');
-      document.body.classList.toggle('no-spring', !isOn);
-      showToast(isOn ? '✨ Spring effect ON' : 'Spring effect OFF', 'success');
-    });
-  }
+}
 
   if (themeBtn) {
     var lightOn = localStorage.getItem('__sw_theme') === 'light';
@@ -316,3 +293,120 @@ document.addEventListener('DOMContentLoaded', function() {
   // Re-observe any newly rendered reveal elements
   setTimeout(observeReveal, 100);
 });
+
+/* ================================================================
+   THEME + SPRING TOGGLES — Fixed for all pages
+   Uses html element class (more reliable than body)
+================================================================ */
+document.addEventListener('DOMContentLoaded', function() {
+
+  // ── Spring Toggle ──────────────────────────────────────────
+  var springBtn = document.getElementById('springToggle');
+  if (springBtn) {
+    var springOn = localStorage.getItem('__sw_spring') !== 'off';
+    // Sync button state
+    springBtn.classList.toggle('on', springOn);
+    // Sync html class
+    document.documentElement.classList.toggle('no-spring', !springOn);
+    document.body.classList.toggle('no-spring', !springOn);
+
+    springBtn.addEventListener('click', function() {
+      var isOn = springBtn.classList.toggle('on');
+      localStorage.setItem('__sw_spring', isOn ? 'on' : 'off');
+      document.documentElement.classList.toggle('no-spring', !isOn);
+      document.body.classList.toggle('no-spring', !isOn);
+      showToast(isOn ? '✨ Spring effect ON' : 'Spring effect OFF', 'success');
+    });
+  }
+
+  // ── Theme Toggle ──────────────────────────────────────────
+  var themeBtn = document.getElementById('themeToggle');
+  if (themeBtn) {
+    var lightOn = localStorage.getItem('__sw_theme') === 'light';
+    // Sync button state
+    themeBtn.classList.toggle('on', lightOn);
+    // Sync html + body class
+    document.documentElement.classList.toggle('light-theme', lightOn);
+    document.body.classList.toggle('light-theme', lightOn);
+
+    themeBtn.addEventListener('click', function() {
+      var isOn = themeBtn.classList.toggle('on');
+      document.documentElement.classList.toggle('light-theme', isOn);
+      document.body.classList.toggle('light-theme', isOn);
+      localStorage.setItem('__sw_theme', isOn ? 'light' : 'dark');
+      showToast(isOn ? '☀️ Light theme ON' : '🌙 Dark theme ON', 'success');
+    });
+  }
+
+  // ── Language Toggle ───────────────────────────────────────
+  var storedLang = localStorage.getItem('__sw_lang') || 'en';
+  document.querySelectorAll('.lang-btn').forEach(function(b) {
+    b.classList.toggle('active', b.dataset.lang === storedLang);
+  });
+
+  // ── Re-observe reveals after DOMContentLoaded ─────────────
+  observeReveal();
+  applySiteName();
+  refreshNav();
+});
+
+/* ================================================================
+   FIREBASE AUTH SYNC — keeps localStorage + Firebase in sync
+================================================================ */
+(function() {
+  // Listen for Firebase auth state changes
+  function initFirebaseAuthSync() {
+    if (window.__fbReady && window.__auth) {
+      window.__auth.onAuthStateChanged(function(user) {
+        if (user) {
+          // Firebase user logged in — sync to localStorage
+          var current = Auth.get();
+          if (!current || !current.firebase) {
+            Auth.save({
+              uid:      user.uid,
+              email:    user.email,
+              username: user.displayName || user.email.split('@')[0],
+              firebase: true
+            });
+            refreshNav();
+          }
+        } else {
+          // Firebase logged out
+          var current = Auth.get();
+          if (current && current.firebase) {
+            Auth.clear();
+            refreshNav();
+          }
+        }
+      });
+    }
+  }
+
+  // Run after Firebase config loads
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(initFirebaseAuthSync, 500);
+    });
+  } else {
+    setTimeout(initFirebaseAuthSync, 500);
+  }
+})();
+
+/* ── Firebase logout support ── */
+function doLogout() {
+  if (window.__fbReady && window.__auth) {
+    window.__auth.signOut().then(function() {
+      Auth.clear();
+      showToast('Logged out successfully.', 'success');
+      setTimeout(function() { window.location.href = 'index.html'; }, 800);
+    }).catch(function() {
+      Auth.clear();
+      window.location.href = 'index.html';
+    });
+  } else {
+    Auth.clear();
+    showToast('Logged out.', 'success');
+    setTimeout(function() { window.location.href = 'index.html'; }, 800);
+  }
+}
+window.doLogout = doLogout;

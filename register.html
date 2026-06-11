@@ -4,188 +4,169 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SITENAME — Create Account</title>
+<script>
+  (function(){
+    var t=localStorage.getItem('__sw_theme');
+    var s=localStorage.getItem('__sw_spring');
+    if(t==='light')document.documentElement.classList.add('light-theme');
+    if(s==='off')  document.documentElement.classList.add('no-spring');
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
-  <style>
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    html{font-size:16px}
-    body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;background:#06060f;color:#eeeeff;overflow-x:hidden;line-height:1.6;-webkit-font-smoothing:antialiased;}
-    #navbar{position:fixed;top:0;left:0;right:0;z-index:400;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 5%;background:rgba(6,6,15,.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.08);}
-    .logo-box{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#6c63ff,#9f7aea);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff;flex-shrink:0;}
-    .nav-logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;color:#eeeeff;text-decoration:none;}
-    .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:12px 24px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;border:none;white-space:nowrap;}
-    .btn-primary{background:#6c63ff;color:#fff;}
-    .hamburger{display:flex;flex-direction:column;gap:5px;background:none;border:none;padding:6px;cursor:pointer;}
-    .hamburger span{display:block;width:22px;height:2px;background:#eeeeff;border-radius:2px;}
-  </style>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
-<script>/* Theme init */if(localStorage.getItem("__sw_theme")==="light")document.body.classList.add("light-theme");if(localStorage.getItem("__sw_spring")==="off")document.body.classList.add("no-spring");</script>
-<div class="auth-page">
-  <div class="auth-glow"></div>
-  <a href="index.html" class="auth-logo-link">
-    <div class="logo-box"><span class="site-letter">M</span></div>
-    <span class="site-name">My Website</span>
-  </a>
 
-  <div class="auth-box">
-    <h2 class="auth-title">Create your account</h2>
-    <p class="auth-subtitle">Already have an account? <a href="login.html">Sign in</a></p>
+<div class="auth-page-minimal">
 
-    <div class="auth-error" id="regErr"><span>⚠</span><span id="regErrMsg"></span></div>
-
-    <div id="regForm">
-      <label class="auth-label">Email Address</label>
-      <input class="auth-input" type="email" id="regEmail" placeholder="you@example.com" oninput="validateEmail()">
-      <div style="font-size:11px;color:#44445a;margin:-10px 0 14px" id="emailMsg"></div>
-
-      <label class="auth-label">Username</label>
-      <input class="auth-input" type="text" id="regUser" placeholder="johndoe" oninput="validateUser()">
-      <div style="font-size:11px;color:#44445a;margin:-10px 0 14px" id="userMsg"></div>
-
-      <label class="auth-label">Password</label>
-      <div class="auth-input-wrap">
-        <input class="auth-input" type="password" id="regPass" placeholder="Min. 8 characters" style="padding-right:42px" oninput="checkStrength()">
-        <button type="button" class="auth-pw-toggle" onclick="togglePw('regPass',this)">👁</button>
-      </div>
-      <div class="pw-strength-bar">
-        <div class="pw-seg" id="ps1"></div><div class="pw-seg" id="ps2"></div>
-        <div class="pw-seg" id="ps3"></div><div class="pw-seg" id="ps4"></div>
-      </div>
-      <div style="font-size:11px;margin:4px 0 14px" id="pwHint"></div>
-
-      <label class="auth-label">Confirm Password</label>
-      <div class="auth-input-wrap">
-        <input class="auth-input" type="password" id="regPass2" placeholder="Repeat password" style="padding-right:42px" oninput="checkConfirm()">
-        <button type="button" class="auth-pw-toggle" onclick="togglePw('regPass2',this)">👁</button>
-      </div>
-      <div style="font-size:11px;color:#44445a;margin:-10px 0 14px" id="confirmMsg"></div>
-
-      <label class="auth-label" style="margin-bottom:4px">Telegram <span style="font-weight:400;color:#44445a">(optional)</span></label>
-      <input class="auth-input" type="text" id="regTG" placeholder="@username">
-
-      <div style="display:flex;align-items:flex-start;gap:10px;margin:16px 0">
-        <input type="checkbox" id="regTerms" style="accent-color:var(--acc);width:16px;height:16px;margin-top:2px;flex-shrink:0">
-        <label for="regTerms" style="font-size:13px;color:#8888aa;cursor:pointer;line-height:1.5">
-          I agree to the <a href="#" style="color:var(--acc)">Terms of Service</a> and <a href="#" style="color:var(--acc)">Privacy Policy</a>
-        </label>
-      </div>
-
-      <button class="auth-submit" id="regBtn" onclick="submitRegister()">
-        <div class="btn-spinner" id="regSpin"></div>
-        <span id="regLabel">Create Account →</span>
-      </button>
-      <div class="auth-protect-note">🔒 Your data is encrypted and never shared</div>
-    </div>
-
-    <div class="form-success" id="regSuccess">
-      <div class="success-icon">🎉</div>
-      <h4>Account Created!</h4>
-      <p>Welcome to <strong class="site-name">My Website</strong>.<br>Your account is ready to use.</p>
-      <a href="pricing.html" class="auth-submit" style="margin-top:16px;display:flex;text-decoration:none">View Plans →</a>
-    </div>
+  <!-- Logo -->
+  <div class="auth-logo-top">
+    <div class="auth-logo-top-box site-letter">M</div>
+    <span class="auth-logo-top-name site-name">My Website</span>
   </div>
 
-  <p class="auth-footer-text">Already have an account? <a href="login.html">Login here</a></p>
+  <div class="auth-form-wrap">
+    <h1 class="auth-heading">Create your account</h1>
+    <p class="auth-sub">Already have an account? <a href="login.html">Sign in</a></p>
+
+    <!-- Telegram button -->
+    <button class="btn-telegram-full" onclick="telegramAuth()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z"/></svg>
+      Continue with Telegram
+    </button>
+
+    <!-- OR -->
+    <div class="or-row">OR</div>
+
+    <!-- Error -->
+    <div class="auth-error-dark" id="regErr">
+      <span>⚠</span><span id="regErrMsg">Error</span>
+    </div>
+
+    <!-- Form -->
+    <div id="regForm">
+      <input class="input-dark-min" type="email" id="regEmail"
+        placeholder="you@example.com" autocomplete="email" oninput="clearRegErr()">
+
+      <input class="input-dark-min" type="text" id="regUser"
+        placeholder="johndoe" autocomplete="username" oninput="clearRegErr()">
+
+      <div class="input-wrap-min">
+        <input class="input-dark-min" type="password" id="regPass"
+          placeholder="Min 6 characters" oninput="clearRegErr()">
+        <button type="button" class="pw-eye-min" onclick="togglePw('regPass',this)">👁</button>
+      </div>
+
+      <div class="input-wrap-min">
+        <input class="input-dark-min" type="password" id="regPass2"
+          placeholder="Confirm password" oninput="clearRegErr()">
+        <button type="button" class="pw-eye-min" onclick="togglePw('regPass2',this)">👁</button>
+      </div>
+
+      <button class="btn-continue-dark" id="regBtn" onclick="submitRegister()">
+        <div class="btn-spinner" id="regSpin"></div>
+        <span id="regLabel">Continue →</span>
+      </button>
+
+      <p class="auth-terms">
+        By continuing, you agree to our
+        <a href="#">Terms</a> and <a href="#">Privacy Policy</a>
+      </p>
+    </div>
+
+    <!-- Success -->
+    <div id="regSuccess" style="display:none;text-align:center;padding:20px 0">
+      <div style="font-size:48px;margin-bottom:14px">🎉</div>
+      <h3 style="font-family:var(--disp);font-size:22px;font-weight:800;color:#eeeeff;margin-bottom:8px">Account Created!</h3>
+      <p style="font-size:14px;color:#8888aa;margin-bottom:20px">Welcome to <strong class="site-name">My Website</strong></p>
+      <a href="pricing.html" class="btn-continue-dark" style="text-decoration:none">View Plans →</a>
+    </div>
+  </div>
 </div>
 
 <div id="toast" class="toast"></div>
+<script src="firebase-config.js"></script>
 <script src="security.js"></script>
 <script src="main.js"></script>
 <script>
-if (Auth.isIn()) window.location.href = 'index.html';
+if(Auth.isIn()) window.location.href='index.html';
 
-function togglePw(id, btn) {
-  const inp = typeof id === 'string' ? document.getElementById(id) : id;
-  inp.type = inp.type === 'password' ? 'text' : 'password';
-  btn.textContent = inp.type === 'password' ? '👁' : '🙈';
+function clearRegErr(){document.getElementById('regErr').classList.remove('show');}
+function showRegErr(msg){document.getElementById('regErrMsg').textContent=msg;document.getElementById('regErr').classList.add('show');}
+
+function togglePw(id,btn){
+  var inp=document.getElementById(id);
+  inp.type=inp.type==='password'?'text':'password';
+  btn.textContent=inp.type==='password'?'👁':'🙈';
 }
 
-function validateEmail() {
-  const v = document.getElementById('regEmail').value.trim();
-  const msg = document.getElementById('emailMsg');
-  if (!v) { msg.textContent = ''; return; }
-  const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
-  msg.style.color = ok ? 'var(--grn2)' : '#f87171';
-  msg.textContent = ok ? '✓ Valid email' : '✗ Enter a valid email';
+function telegramAuth(){
+  showToast('Telegram login coming soon!','success');
 }
 
-function validateUser() {
-  const v = document.getElementById('regUser').value.trim();
-  const msg = document.getElementById('userMsg');
-  if (!v) { msg.textContent = ''; return; }
-  const ok = /^[a-zA-Z0-9_]{3,20}$/.test(v);
-  msg.style.color = ok ? 'var(--grn2)' : '#f87171';
-  msg.textContent = ok ? '✓ Looks good!' : '✗ 3-20 chars, letters/numbers/underscore only';
+function setLoading(on){
+  var btn=document.getElementById('regBtn');
+  btn.disabled=on;
+  document.getElementById('regSpin').style.display=on?'inline-block':'none';
+  document.getElementById('regLabel').style.opacity=on?'.5':'1';
 }
 
-function checkStrength() {
-  const v = document.getElementById('regPass').value;
-  const segs = [1,2,3,4].map(i => document.getElementById('ps'+i));
-  const hint = document.getElementById('pwHint');
-  segs.forEach(s => s.className = 'pw-seg');
-  if (!v) { hint.textContent = ''; return; }
-  let sc = 0;
-  if (v.length >= 8)  sc++;
-  if (v.length >= 12) sc++;
-  if (/[A-Z]/.test(v) && /[0-9]/.test(v)) sc++;
-  if (/[^A-Za-z0-9]/.test(v)) sc++;
-  const cls = ['','weak','fair','good','strong'];
-  const lbl = ['','Weak','Fair','Good','Strong'];
-  const col = ['','#f87171','#fbbf24','#34d399','var(--grn2)'];
-  for (let i = 0; i < sc; i++) segs[i].classList.add(cls[Math.min(sc,4)]);
-  hint.style.color = col[Math.min(sc,4)];
-  hint.textContent = lbl[Math.min(sc,4)];
+function submitRegister(){
+  var email=document.getElementById('regEmail').value.trim();
+  var user =document.getElementById('regUser').value.trim();
+  var pass =document.getElementById('regPass').value;
+  var pass2=document.getElementById('regPass2').value;
+  clearRegErr();
+
+  if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){showRegErr('Enter a valid email address.');return;}
+  if(!user||user.length<3){showRegErr('Username must be at least 3 characters.');return;}
+  if(pass.length<6){showRegErr('Password must be at least 6 characters.');return;}
+  if(pass!==pass2){showRegErr('Passwords do not match.');return;}
+
+  setLoading(true);
+
+  if(window.__fbReady&&window.__auth){
+    window.__auth.createUserWithEmailAndPassword(email,pass)
+      .then(function(r){
+        return r.user.updateProfile({displayName:user}).then(function(){
+          if(window.__db){
+            window.__db.collection('users').doc(r.user.uid).set({
+              username:user,email:email,createdAt:firebase.firestore.FieldValue.serverTimestamp()
+            }).catch(function(){});
+          }
+          Auth.save({uid:r.user.uid,email:email,username:user,firebase:true});
+          onRegSuccess();
+        });
+      })
+      .catch(function(err){
+        setLoading(false);
+        var m='Registration failed. Try again.';
+        if(err.code==='auth/email-already-in-use') m='Email already registered. Try logging in.';
+        if(err.code==='auth/weak-password')        m='Password is too weak.';
+        showRegErr(m);
+      });
+  } else {
+    setTimeout(function(){
+      var uid='usr_'+Date.now();
+      var d={username:user,email:email,password:pass,uid:uid,created:new Date().toISOString()};
+      localStorage.setItem('__sw_reg_'+email.toLowerCase(),JSON.stringify(d));
+      localStorage.setItem('__sw_reg_'+user.toLowerCase(),JSON.stringify(d));
+      Auth.save({uid:uid,email:email,username:user});
+      onRegSuccess();
+    },1400);
+  }
 }
 
-function checkConfirm() {
-  const p1 = document.getElementById('regPass').value;
-  const p2 = document.getElementById('regPass2').value;
-  const msg = document.getElementById('confirmMsg');
-  if (!p2) { msg.textContent = ''; return; }
-  const ok = p1 === p2;
-  msg.style.color = ok ? 'var(--grn2)' : '#f87171';
-  msg.textContent = ok ? '✓ Passwords match' : '✗ Passwords do not match';
-}
-
-function submitRegister() {
-  const email = document.getElementById('regEmail').value.trim();
-  const user  = document.getElementById('regUser').value.trim();
-  const pass  = document.getElementById('regPass').value;
-  const pass2 = document.getElementById('regPass2').value;
-  const tg    = document.getElementById('regTG').value.trim();
-  const terms = document.getElementById('regTerms').checked;
-  const errEl = document.getElementById('regErr');
-  errEl.classList.remove('show');
-
-  const showErr = msg => { document.getElementById('regErrMsg').textContent = msg; errEl.classList.add('show'); };
-
-  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showErr('Enter a valid email address.'); return; }
-  if (!user  || !/^[a-zA-Z0-9_]{3,20}$/.test(user))        { showErr('Invalid username format.'); return; }
-  if (pass.length < 8)                                       { showErr('Password must be at least 8 characters.'); return; }
-  if (pass !== pass2)                                        { showErr('Passwords do not match.'); return; }
-  if (!terms)                                                { showErr('Please accept the Terms of Service.'); return; }
-
-  const btn = document.getElementById('regBtn');
-  document.getElementById('regSpin').style.display = 'inline-block';
-  document.getElementById('regLabel').style.opacity = '.6';
-  btn.disabled = true;
-
-  setTimeout(() => {
-    const uid = 'usr_' + Date.now();
-    const data = { username: user, email, password: pass, telegram: tg, uid, created: new Date().toISOString() };
-    localStorage.setItem('__sw_reg_' + user.toLowerCase(), JSON.stringify(data));
-    localStorage.setItem('__sw_reg_' + email.toLowerCase(), JSON.stringify(data));
-    Auth.save({ username: user, email, uid });
-
-    document.getElementById('regForm').style.display = 'none';
-    document.getElementById('regSuccess').style.display = 'block';
-    showToast('Account created! 🎉', 'success');
-  }, 1600);
+function onRegSuccess(){
+  setLoading(false);
+  document.getElementById('regForm').style.display='none';
+  document.getElementById('regSuccess').style.display='block';
+  showToast('Account created! 🎉','success');
 }
 </script>
 </body>

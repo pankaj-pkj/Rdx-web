@@ -4,161 +4,175 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SITENAME — Login</title>
+<script>
+  (function(){
+    var t=localStorage.getItem('__sw_theme');
+    var s=localStorage.getItem('__sw_spring');
+    if(t==='light')document.documentElement.classList.add('light-theme');
+    if(s==='off')  document.documentElement.classList.add('no-spring');
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
-  <style>
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    html{font-size:16px}
-    body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;background:#06060f;color:#eeeeff;overflow-x:hidden;line-height:1.6;-webkit-font-smoothing:antialiased;}
-    #navbar{position:fixed;top:0;left:0;right:0;z-index:400;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 5%;background:rgba(6,6,15,.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.08);}
-    .logo-box{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#6c63ff,#9f7aea);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff;flex-shrink:0;}
-    .nav-logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;color:#eeeeff;text-decoration:none;}
-    .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:12px 24px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;border:none;white-space:nowrap;}
-    .btn-primary{background:#6c63ff;color:#fff;}
-    .hamburger{display:flex;flex-direction:column;gap:5px;background:none;border:none;padding:6px;cursor:pointer;}
-    .hamburger span{display:block;width:22px;height:2px;background:#eeeeff;border-radius:2px;}
-  </style>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 </head>
-<body>
-<script>/* Theme init */if(localStorage.getItem("__sw_theme")==="light")document.body.classList.add("light-theme");if(localStorage.getItem("__sw_spring")==="off")document.body.classList.add("no-spring");</script>
-<div class="auth-page">
-  <div class="auth-glow"></div>
+<body style="background:#06060f;min-height:100vh">
 
-  <a href="index.html" class="auth-logo-link">
-    <div class="logo-box"><span class="site-letter">M</span></div>
-    <span class="site-name">My Website</span>
-  </a>
+<div class="auth-page-minimal">
 
-  <div class="auth-box">
-    <h2 class="auth-title">Welcome back</h2>
-    <p class="auth-subtitle">Don't have an account? <a href="register.html">Sign Up</a></p>
+  <!-- Logo -->
+  <div class="auth-logo-top">
+    <div class="auth-logo-top-box site-letter">M</div>
+    <span class="auth-logo-top-name site-name">My Website</span>
+  </div>
+
+  <div class="auth-form-wrap">
+    <h1 class="auth-heading">Welcome back</h1>
+    <p class="auth-sub">Don't have an account? <a href="register.html">Sign up</a></p>
+
+    <!-- Telegram -->
+    <button class="btn-telegram-full" onclick="telegramLogin()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z"/></svg>
+      Continue with Telegram
+    </button>
+
+    <div class="or-row">OR</div>
 
     <!-- Error -->
-    <div class="auth-error" id="loginErr"><span>⚠</span><span id="loginErrMsg"></span></div>
+    <div class="auth-error-dark" id="loginErr">
+      <span>⚠</span><span id="loginErrMsg">Error</span>
+    </div>
 
-    <!-- Form -->
     <div id="loginForm">
-      <label class="auth-label">Email or Username</label>
-      <input class="auth-input" type="text" id="loginUser" placeholder="you@example.com" autocomplete="username" oninput="document.getElementById('loginErr').classList.remove('show')">
+      <input class="input-dark-min" type="email" id="loginEmail"
+        placeholder="you@example.com" autocomplete="email"
+        oninput="clearErr()">
 
-      <div class="auth-row-label">
-        <label class="auth-label" style="margin:0">Password</label>
-        <a href="#" class="auth-forgot" onclick="handleForgot(event)">Forgot password?</a>
+      <div style="display:flex;justify-content:flex-end;margin-bottom:5px">
+        <a href="#" onclick="forgotPw(event)"
+          style="font-size:12px;color:#8888aa;transition:color .2s"
+          onmouseover="this.style.color='var(--acc)'"
+          onmouseout="this.style.color='#8888aa'">Forgot password?</a>
       </div>
-      <div class="auth-input-wrap">
-        <input class="auth-input" type="password" id="loginPass" placeholder="Your password" autocomplete="current-password" style="padding-right:42px" oninput="document.getElementById('loginErr').classList.remove('show')">
-        <button type="button" class="auth-pw-toggle" id="eyeBtn" onclick="togglePw('loginPass','eyeBtn')">👁</button>
+      <div class="input-wrap-min">
+        <input class="input-dark-min" type="password" id="loginPass"
+          placeholder="Your password" autocomplete="current-password"
+          oninput="clearErr()">
+        <button type="button" class="pw-eye-min" onclick="togglePw()">👁</button>
       </div>
 
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px">
-        <input type="checkbox" id="rememberMe" style="accent-color:var(--acc);width:16px;height:16px">
-        <label for="rememberMe" style="font-size:13px;color:#8888aa;cursor:pointer">Remember me</label>
-      </div>
-
-      <button class="auth-submit" id="loginBtn" onclick="submitLogin()">
+      <button class="btn-continue-dark" id="loginBtn" onclick="submitLogin()">
         <div class="btn-spinner" id="loginSpin"></div>
         <span id="loginLabel">Continue →</span>
       </button>
 
-      <div class="auth-protect-note">
-        🔒 Secured with AES-256 encryption
-      </div>
+      <p class="auth-terms">
+        By continuing, you agree to our
+        <a href="#">Terms</a> and <a href="#">Privacy Policy</a>
+      </p>
     </div>
 
-    <!-- Success -->
-    <div class="form-success" id="loginSuccess">
-      <div class="success-icon">✅</div>
-      <h4>Login Successful!</h4>
-      <p>Welcome back to <strong class="site-name">My Website</strong>. Redirecting...</p>
+    <div id="loginSuccess" style="display:none;text-align:center;padding:20px 0">
+      <div style="font-size:48px;margin-bottom:14px">✅</div>
+      <h3 style="font-family:var(--disp);font-size:22px;font-weight:800;color:#eeeeff;margin-bottom:8px">Login Successful!</h3>
+      <p style="font-size:14px;color:#8888aa">Welcome back to <strong class="site-name">My Website</strong></p>
     </div>
   </div>
-
-  <p class="auth-footer-text">
-    New here? <a href="register.html">Create a free account →</a>
-  </p>
-  <p class="auth-footer-text" style="margin-top:8px">
-    <a href="quick-purchase.html" style="color:#55556a">Or continue as Guest →</a>
-  </p>
 </div>
 
 <div id="toast" class="toast"></div>
+<script src="firebase-config.js"></script>
 <script src="security.js"></script>
 <script src="main.js"></script>
 <script>
-// Redirect if already logged in
-if (Auth.isIn()) {
-  const red = new URLSearchParams(window.location.search).get('redirect') || 'index.html';
-  window.location.href = red;
+if(Auth.isIn()){
+  var red=new URLSearchParams(window.location.search).get('redirect')||'index.html';
+  window.location.href=red;
 }
 
-function togglePw(inputId, btnId) {
-  const inp = document.getElementById(inputId);
-  const btn = document.getElementById(btnId);
-  inp.type = inp.type === 'password' ? 'text' : 'password';
-  btn.textContent = inp.type === 'password' ? '👁' : '🙈';
+function clearErr(){document.getElementById('loginErr').classList.remove('show');}
+function showErr(m){document.getElementById('loginErrMsg').textContent=m;document.getElementById('loginErr').classList.add('show');}
+
+function togglePw(){
+  var i=document.getElementById('loginPass');
+  var b=document.querySelector('.pw-eye-min');
+  i.type=i.type==='password'?'text':'password';
+  b.textContent=i.type==='password'?'👁':'🙈';
 }
 
-function handleForgot(e) {
+function telegramLogin(){ showToast('Telegram login coming soon!','success'); }
+
+function forgotPw(e){
   e.preventDefault();
-  const email = document.getElementById('loginUser').value.trim();
-  if (!email) { showAuthErr('Enter your email first.'); return; }
-  showToast('Password reset link sent to ' + email, 'success');
+  var email=document.getElementById('loginEmail').value.trim();
+  if(!email){showErr('Enter your email first.');return;}
+  if(window.__fbReady&&window.__auth){
+    window.__auth.sendPasswordResetEmail(email)
+      .then(()=>showToast('Reset email sent to '+email,'success'))
+      .catch(err=>showToast(err.message,'error'));
+  } else {
+    showToast('Reset link sent (demo mode)','success');
+  }
 }
 
-function showAuthErr(msg) {
-  const el = document.getElementById('loginErr');
-  document.getElementById('loginErrMsg').textContent = msg;
-  el.classList.add('show');
+function setLoad(on){
+  document.getElementById('loginBtn').disabled=on;
+  document.getElementById('loginSpin').style.display=on?'inline-block':'none';
+  document.getElementById('loginLabel').style.opacity=on?'.5':'1';
 }
 
-function submitLogin() {
-  const user = document.getElementById('loginUser').value.trim();
-  const pass = document.getElementById('loginPass').value;
-  document.getElementById('loginErr').classList.remove('show');
+function submitLogin(){
+  var email=document.getElementById('loginEmail').value.trim();
+  var pass =document.getElementById('loginPass').value;
+  clearErr();
+  if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){showErr('Enter a valid email address.');return;}
+  if(!pass||pass.length<6){showErr('Password must be at least 6 characters.');return;}
+  setLoad(true);
 
-  if (!user) { showAuthErr('Please enter your email or username.'); return; }
-  if (!pass)  { showAuthErr('Please enter your password.'); return; }
-  if (pass.length < 4) { showAuthErr('Password is too short.'); return; }
-
-  // Loading
-  const btn  = document.getElementById('loginBtn');
-  const spin = document.getElementById('loginSpin');
-  const lbl  = document.getElementById('loginLabel');
-  btn.disabled = true; spin.style.display = 'inline-block'; lbl.style.opacity = '.6';
-
-  setTimeout(() => {
-    btn.disabled = false; spin.style.display = 'none'; lbl.style.opacity = '1';
-
-    // Check stored user
-    const stored = localStorage.getItem('__sw_reg_' + user.toLowerCase()) ||
-                   localStorage.getItem('__sw_reg_' + user.toLowerCase().split('@')[0]);
-    let userData;
-    if (stored) {
-      const reg = JSON.parse(stored);
-      if (reg.password !== pass) { showAuthErr('Incorrect password. Please try again.'); return; }
-      userData = { username: reg.username, email: reg.email, uid: reg.uid };
-    } else {
-      // Demo mode — accept any credentials
-      userData = {
-        username: user.includes('@') ? user.split('@')[0] : user,
-        email: user.includes('@') ? user : user + '@demo.com',
-        uid: 'demo_' + Date.now()
-      };
-    }
-    Auth.save(userData);
-    document.getElementById('loginForm').style.display = 'none';
-    document.getElementById('loginSuccess').style.display = 'block';
-    showToast('Logged in successfully! 🎉', 'success');
-    const redirect = new URLSearchParams(window.location.search).get('redirect') || 'index.html';
-    setTimeout(() => window.location.href = redirect, 1600);
-  }, 1400);
+  if(window.__fbReady&&window.__auth){
+    window.__auth.signInWithEmailAndPassword(email,pass)
+      .then(r=>{
+        Auth.save({uid:r.user.uid,email:r.user.email,username:r.user.displayName||r.user.email.split('@')[0],firebase:true});
+        onSuccess();
+      })
+      .catch(err=>{
+        setLoad(false);
+        var m='Login failed.';
+        if(err.code==='auth/user-not-found')   m='No account with this email.';
+        if(err.code==='auth/wrong-password')   m='Incorrect password.';
+        if(err.code==='auth/invalid-credential') m='Invalid email or password.';
+        if(err.code==='auth/too-many-requests') m='Too many attempts. Try later.';
+        showErr(m);
+      });
+  } else {
+    setTimeout(()=>{
+      var stored=localStorage.getItem('__sw_reg_'+email.toLowerCase());
+      if(stored){
+        var reg=JSON.parse(stored);
+        if(reg.password!==pass){setLoad(false);showErr('Incorrect password.');return;}
+        Auth.save({uid:reg.uid,email:reg.email,username:reg.username});
+      } else {
+        Auth.save({uid:'demo_'+Date.now(),email:email,username:email.split('@')[0]});
+      }
+      onSuccess();
+    },1200);
+  }
 }
 
-document.addEventListener('keydown', e => { if (e.key === 'Enter') submitLogin(); });
+function onSuccess(){
+  setLoad(false);
+  document.getElementById('loginForm').style.display='none';
+  document.getElementById('loginSuccess').style.display='block';
+  showToast('Logged in! 🎉','success');
+  var red=new URLSearchParams(window.location.search).get('redirect')||'index.html';
+  setTimeout(()=>window.location.href=red,1600);
+}
+
+document.addEventListener('keydown',e=>{if(e.key==='Enter')submitLogin();});
 </script>
 </body>
 </html>

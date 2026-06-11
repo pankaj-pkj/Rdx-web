@@ -4,254 +4,255 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SITENAME — Quick Purchase</title>
+<script>
+  (function(){
+    var t=localStorage.getItem('__sw_theme');
+    var s=localStorage.getItem('__sw_spring');
+    if(t==='light')document.documentElement.classList.add('light-theme');
+    if(s==='off')  document.documentElement.classList.add('no-spring');
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
-  <style>
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    html{font-size:16px}
-    body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;background:#06060f;color:#eeeeff;overflow-x:hidden;line-height:1.6;-webkit-font-smoothing:antialiased;}
-    #navbar{position:fixed;top:0;left:0;right:0;z-index:400;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 5%;background:rgba(6,6,15,.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.08);}
-    .logo-box{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#6c63ff,#9f7aea);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff;flex-shrink:0;}
-    .nav-logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;color:#eeeeff;text-decoration:none;}
-    .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:12px 24px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;border:none;white-space:nowrap;}
-    .btn-primary{background:#6c63ff;color:#fff;}
-    .hamburger{display:flex;flex-direction:column;gap:5px;background:none;border:none;padding:6px;cursor:pointer;}
-    .hamburger span{display:block;width:22px;height:2px;background:#eeeeff;border-radius:2px;}
-  </style>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 </head>
-<body>
-<script>/* Theme init */if(localStorage.getItem("__sw_theme")==="light")document.body.classList.add("light-theme");if(localStorage.getItem("__sw_spring")==="off")document.body.classList.add("no-spring");</script>
-<!-- Simple top nav -->
-<div class="pay-topnav">
-  <a href="index.html" class="pay-topnav-logo">
-    <div class="logo-box"><span class="site-letter">M</span></div>
+<body style="background:#06060f;min-height:100vh">
+
+<!-- Top Nav -->
+<div class="qp-topnav">
+  <a href="index.html" class="qp-topnav-logo">
+    <div class="logo-box" style="width:30px;height:30px;border-radius:50%;font-size:12px">
+      <span class="site-letter">M</span>
+    </div>
     <span class="site-name">My Website</span>
   </a>
-  <a href="index.html" class="pay-topnav-back" title="Back to Home">←</a>
+  <a href="index.html" class="qp-topnav-back">← Back to Home</a>
 </div>
 
-<div class="qp-page">
-<div class="qp-container">
+<!-- Hero -->
+<div class="qp-hero-dark">
+  <div class="sec-label" style="margin-bottom:12px">Quick Purchase</div>
+  <h1>Buy Without Registration</h1>
+  <p>Get your license key instantly after payment</p>
+</div>
 
-  <!-- Hero -->
-  <div class="qp-hero">
-    <div class="qp-hero-badge">Quick Purchase</div>
-    <h1>Buy Without Registration</h1>
-    <p>Get your license key instantly after payment</p>
+<!-- Plan Selector Card -->
+<div class="qp-plan-card-dark">
+  <div class="qp-plan-card-title">Select Your Plan</div>
+  <div id="planRows"></div>
+
+  <!-- Features -->
+  <div class="qp-features-dark">
+    <div class="qp-feat-dark"><div class="qp-feat-icon-dark">✓</div>Unlimited requests</div>
+    <div class="qp-feat-dark"><div class="qp-feat-icon-dark">✓</div>Priority support</div>
+    <div class="qp-feat-dark"><div class="qp-feat-icon-dark">✓</div>API access</div>
+    <div class="qp-feat-dark"><div class="qp-feat-icon-dark">✓</div>Instant activation</div>
   </div>
+</div>
 
-  <!-- Plan selector -->
-  <div class="qp-plan-box">
-    <div class="qp-plan-box-title">Select Your Plan</div>
-    <div id="planList"></div>
+<!-- Contact Info Card -->
+<div class="qp-contact-card-dark">
+  <div class="qp-contact-title-dark">Contact Information</div>
+  <div class="qp-contact-sub-dark">How should we send your license key?</div>
 
-    <!-- Features -->
-    <div class="qp-feats">
-      <div class="qp-feat-row"><div class="qp-feat-check">✓</div>Unlimited requests</div>
-      <div class="qp-feat-row"><div class="qp-feat-check">✓</div>Priority support</div>
-      <div class="qp-feat-row"><div class="qp-feat-check">✓</div>API access</div>
-      <div class="qp-feat-row"><div class="qp-feat-check">✓</div>Instant activation</div>
-    </div>
-  </div>
-
-  <!-- Contact info -->
-  <div class="qp-contact-box">
-    <h2 class="qp-contact-title">Contact Information</h2>
-    <p class="qp-contact-sub">How should we send your license key?</p>
-
-    <div class="qp-tab-row">
-      <button class="qp-tab-btn active" id="tabEmail" onclick="switchTab('email')">
-        <span class="qp-tab-icon">✉</span>
-        <span class="qp-tab-name">Email</span>
-      </button>
-      <button class="qp-tab-btn" id="tabTG" onclick="switchTab('telegram')">
-        <span class="qp-tab-icon">✈</span>
-        <span class="qp-tab-name">Telegram</span>
-      </button>
-    </div>
-
-    <div id="emailField">
-      <label class="qp-input-label">Email Address</label>
-      <input class="qp-input" type="email" id="emailInput" placeholder="your@email.com">
-      <p class="qp-input-note">Your license key will be sent to this email</p>
-    </div>
-    <div id="tgField" style="display:none">
-      <label class="qp-input-label">Telegram ID</label>
-      <input class="qp-input" type="text" id="tgInput" placeholder="@username or user ID">
-      <p class="qp-input-note">Your license key will be sent via Telegram</p>
-    </div>
-
-    <!-- Promo code -->
-    <div style="margin-top:14px">
-      <label class="qp-input-label">Promo Code <span style="font-weight:400;color:#aaa">(Optional)</span></label>
-      <div class="qp-promo-row">
-        <input class="qp-input" type="text" id="promoInput" placeholder="ENTER CODE">
-        <button class="qp-apply-btn" onclick="applyPromo()">Apply</button>
-      </div>
-      <div id="promoMsg" style="font-size:12px;margin-top:6px"></div>
-    </div>
-
-    <!-- Order summary -->
-    <div class="qp-summary-box">
-      <div class="qp-sum-row"><span>Selected Plan:</span><span id="sumPlan" style="color:#333;font-weight:600">—</span></div>
-      <div class="qp-sum-row" id="discRow" style="display:none"><span style="color:var(--grn)">Discount (10%):</span><span id="discAmt" style="color:var(--grn)"></span></div>
-      <div class="qp-sum-row total"><span>Total:</span><span class="qp-total-price" id="totalPrice">$0</span></div>
-    </div>
-
-    <!-- Error -->
-    <div id="qpErr" style="display:none;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);border-radius:12px;padding:12px 14px;font-size:13px;color:#ef4444;margin-top:12px"></div>
-
-    <button class="qp-proceed-btn" id="proceedBtn" onclick="proceed()">
-      <div class="btn-spinner" id="procSpin"></div>
-      <span id="procLabel">Proceed to Payment →</span>
+  <!-- Email / Telegram Tabs -->
+  <div class="qp-tabs-dark">
+    <button class="qp-tab-dark active" id="tabEmailBtn" onclick="switchTab('email')">
+      <span class="qp-tab-dark-icon">✉</span>
+      <span class="qp-tab-dark-name">Email</span>
     </button>
-    <p class="qp-terms-note">
-      By continuing you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
-    </p>
+    <button class="qp-tab-dark" id="tabTGBtn" onclick="switchTab('telegram')">
+      <span class="qp-tab-dark-icon">✈</span>
+      <span class="qp-tab-dark-name">Telegram</span>
+    </button>
   </div>
 
-  <div class="qp-login-hint">Already have an account?</div>
-  <a href="login.html" class="qp-login-btn">← Sign in to your account</a>
+  <!-- Email field -->
+  <div id="emailSection">
+    <label class="qp-label-dark">Email Address</label>
+    <input class="qp-input-dark" type="email" id="emailInput" placeholder="your@email.com">
+    <p class="qp-hint-dark">Your license key will be sent to this email</p>
+  </div>
 
+  <!-- Telegram field -->
+  <div id="tgSection" style="display:none">
+    <label class="qp-label-dark">Telegram ID</label>
+    <input class="qp-input-dark" type="text" id="tgInput" placeholder="@username or user ID">
+    <p class="qp-hint-dark">Your license key will be sent via Telegram</p>
+  </div>
+
+  <!-- Promo code -->
+  <div style="margin-top:18px">
+    <label class="qp-label-dark">Have a promo code? <span style="font-weight:400;color:#44445a">(Optional)</span></label>
+    <div class="qp-promo-dark">
+      <input class="qp-input-dark" type="text" id="promoInput"
+        placeholder="ENTER CODE" style="text-transform:uppercase;font-family:var(--mono);letter-spacing:1.5px">
+      <button class="qp-promo-apply-dark" onclick="applyPromo()">Apply</button>
+    </div>
+    <div id="promoMsg" style="font-size:12px;margin-top:5px"></div>
+  </div>
+
+  <!-- Summary -->
+  <div class="qp-summary-dark">
+    <div class="qp-sum-row-dark">
+      <span>Selected Plan:</span>
+      <span style="color:#eeeeff;font-weight:600" id="sumPlanName">15 Days</span>
+    </div>
+    <div class="qp-sum-row-dark" id="discRow" style="display:none">
+      <span style="color:var(--grn2)">Discount (10%):</span>
+      <span style="color:var(--grn2)" id="discAmt"></span>
+    </div>
+    <div class="qp-sum-row-dark" style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.07)">
+      <span style="color:#eeeeff;font-size:15px;font-weight:600">Total:</span>
+      <span class="qp-sum-total-dark" id="sumTotal">$139.00</span>
+    </div>
+  </div>
+
+  <!-- Error -->
+  <div id="qpErr" style="display:none;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);border-radius:10px;padding:11px 14px;font-size:13px;color:#f87171;margin-top:12px"></div>
 </div>
+
+<!-- Proceed Button -->
+<button class="qp-proceed-dark" id="proceedBtn" onclick="proceed()">
+  <div class="btn-spinner" id="procSpin"></div>
+  <span id="procLabel">Proceed to Payment</span>
+</button>
+
+<!-- Footer hint -->
+<div class="qp-footer-hint">
+  Already have an account? <a href="login.html">Sign in</a>
 </div>
 
 <div id="toast" class="toast"></div>
 <script src="security.js"></script>
 <script src="main.js"></script>
 <script>
+/* ── Plans data ── */
 const PLANS = [
-  { id:'3day',    label:'3 Days',   dur:'3 days',   price:45,  popular:false },
-  { id:'7day',    label:'7 Days',   dur:'7 days',   price:79,  popular:false },
-  { id:'15day',   label:'15 Days',  dur:'15 days',  price:139, popular:true  },
-  { id:'30day',   label:'30 Days',  dur:'30 days',  price:249, popular:false },
-  { id:'oneyear', label:'One Year', dur:'365 days', price:2490,popular:false },
+  {id:'3day',    name:'3 Days',   dur:'3 days',   price:45,   popular:false},
+  {id:'7day',    name:'7 Days',   dur:'7 days',   price:79,   popular:false},
+  {id:'15day',   name:'15 Days',  dur:'15 days',  price:139,  popular:true},
+  {id:'30day',   name:'30 Days',  dur:'30 days',  price:249,  popular:false},
+  {id:'oneyear', name:'One Year', dur:'1 year',   price:2490, popular:false},
 ];
 
-let selectedPlan = PLANS[2]; // default 15 days
-let promoApplied = false;
-let contactMode  = 'email';
+let sel        = PLANS[2]; // default 15 days
+let promoOn    = false;
+let contactMode= 'email';
 
-document.addEventListener('DOMContentLoaded', () => {
-  applySiteName();
-  // Check URL param
-  const urlPlan = new URLSearchParams(window.location.search).get('plan');
-  if (urlPlan) {
-    const found = PLANS.find(p => p.id === urlPlan);
-    if (found) selectedPlan = found;
-  }
-  buildPlanList();
-  updateSummary();
-});
-
-function buildPlanList() {
-  const list = document.getElementById('planList');
-  list.innerHTML = '';
+/* ── Build plan rows ── */
+function buildRows(){
+  const wrap = document.getElementById('planRows');
+  wrap.innerHTML = '';
   PLANS.forEach(p => {
     const row = document.createElement('div');
-    row.className = 'qp-plan-row' + (p.id === selectedPlan.id ? ' selected' : '');
-    row.id = 'pr-' + p.id;
+    row.className = 'qp-plan-row-dark' + (p.id===sel.id?' selected':'');
+    row.id = 'pr-'+p.id;
     row.onclick = () => choosePlan(p);
     row.innerHTML = `
-      <div class="qp-plan-row-left">
-        <div class="qp-plan-radio"></div>
-        <div>
-          <div style="font-size:15px;font-weight:600;color:#0d0d1a">${p.label}${p.popular ? '<span class="qp-plan-popular-tag">Popular</span>' : ''}</div>
-          <div style="font-size:12px;color:#aaa">${p.dur}</div>
+      <div class="qp-plan-left-dark">
+        <div class="qp-plan-name-dark">
+          ${p.name}
+          ${p.popular?'<span class="qp-popular-tag-dark">Popular</span>':''}
         </div>
+        <div class="qp-plan-dur-dark">${p.dur}</div>
       </div>
-      <div class="qp-plan-price">$${p.price}.00</div>`;
-    list.appendChild(row);
+      <div class="qp-plan-price-dark">$${p.price.toLocaleString()}.00</div>`;
+    wrap.appendChild(row);
   });
 }
 
-function choosePlan(p) {
-  selectedPlan = p;
-  promoApplied = false;
+function choosePlan(p){
+  sel = p;
+  promoOn = false;
   document.getElementById('promoInput').value = '';
   document.getElementById('promoMsg').textContent = '';
   document.getElementById('discRow').style.display = 'none';
-  document.querySelectorAll('.qp-plan-row').forEach(el => el.classList.remove('selected'));
-  document.getElementById('pr-' + p.id)?.classList.add('selected');
+  document.querySelectorAll('.qp-plan-row-dark').forEach(r => r.classList.remove('selected'));
+  document.getElementById('pr-'+p.id)?.classList.add('selected');
   updateSummary();
 }
 
-function updateSummary() {
-  const discount = promoApplied ? Math.floor(selectedPlan.price * 0.1) : 0;
-  const total    = selectedPlan.price - discount;
-  document.getElementById('sumPlan').textContent  = selectedPlan.label;
-  document.getElementById('totalPrice').textContent = '$' + total + '.00';
-  if (promoApplied) {
+function updateSummary(){
+  const disc  = promoOn ? Math.floor(sel.price*0.1) : 0;
+  const total = sel.price - disc;
+  document.getElementById('sumPlanName').textContent = sel.name;
+  document.getElementById('sumTotal').textContent    = '$'+total.toLocaleString()+'.00';
+  if(promoOn){
     document.getElementById('discRow').style.display = 'flex';
-    document.getElementById('discAmt').textContent = '-$' + discount;
+    document.getElementById('discAmt').textContent   = '-$'+disc;
   }
 }
 
-function switchTab(mode) {
+function switchTab(mode){
   contactMode = mode;
-  document.getElementById('emailField').style.display = mode === 'email' ? 'block' : 'none';
-  document.getElementById('tgField').style.display    = mode === 'telegram' ? 'block' : 'none';
-  document.getElementById('tabEmail').classList.toggle('active', mode === 'email');
-  document.getElementById('tabTG').classList.toggle('active',    mode === 'telegram');
+  document.getElementById('emailSection').style.display = mode==='email'?'block':'none';
+  document.getElementById('tgSection').style.display    = mode==='telegram'?'block':'none';
+  document.getElementById('tabEmailBtn').classList.toggle('active', mode==='email');
+  document.getElementById('tabTGBtn').classList.toggle('active',    mode==='telegram');
 }
 
-function applyPromo() {
+function applyPromo(){
   const code = document.getElementById('promoInput').value.trim().toUpperCase();
   const msg  = document.getElementById('promoMsg');
   const VALID = ['SAVE10','PROMO10','DISC10'];
-  if (!selectedPlan) { msg.style.color='#ef4444'; msg.textContent='Select a plan first.'; return; }
-  if (VALID.includes(code)) {
-    promoApplied = true;
-    msg.style.color = 'var(--grn)';
+  if(VALID.includes(code)){
+    promoOn = true;
+    msg.style.color = 'var(--grn2)';
     msg.textContent = '✓ 10% discount applied!';
     updateSummary();
-    showToast('Promo code applied! 🎉', 'success');
-  } else if (code) {
-    promoApplied = false;
-    msg.style.color = '#ef4444';
+    showToast('Promo applied! 🎉','success');
+  } else if(code){
+    promoOn = false;
+    msg.style.color = '#f87171';
     msg.textContent = '✗ Invalid code. Try: SAVE10';
-    showToast('Invalid promo code.', 'error');
   }
 }
 
-function showQPErr(msg) {
+function showQPErr(msg){
   const el = document.getElementById('qpErr');
   el.style.display = 'block';
-  el.textContent = '⚠ ' + msg;
-  setTimeout(() => el.style.display = 'none', 3500);
+  el.textContent   = '⚠ '+msg;
+  setTimeout(()=>el.style.display='none', 3200);
 }
 
-function proceed() {
-  const contact = contactMode === 'email'
+function proceed(){
+  const contact = contactMode==='email'
     ? document.getElementById('emailInput').value.trim()
     : document.getElementById('tgInput').value.trim();
 
-  if (!contact) { showQPErr('Please enter your ' + (contactMode === 'email' ? 'email address.' : 'Telegram username.')); return; }
-  if (contactMode === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact)) { showQPErr('Enter a valid email address.'); return; }
+  if(!contact){ showQPErr('Please enter your '+(contactMode==='email'?'email address.':'Telegram username.')); return; }
+  if(contactMode==='email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact)){ showQPErr('Enter a valid email address.'); return; }
 
   const btn = document.getElementById('proceedBtn');
   btn.disabled = true;
-  document.getElementById('procSpin').style.display = 'inline-block';
-  document.getElementById('procLabel').style.opacity = '.6';
+  document.getElementById('procSpin').style.display  = 'inline-block';
+  document.getElementById('procLabel').style.opacity = '.5';
 
-  const discount = promoApplied ? Math.floor(selectedPlan.price * 0.1) : 0;
-  const total    = selectedPlan.price - discount;
+  const disc  = promoOn ? Math.floor(sel.price*0.1) : 0;
+  const total = sel.price - disc;
 
-  // Save to sessionStorage
   sessionStorage.setItem('__order', JSON.stringify({
-    plan: selectedPlan.id, label: selectedPlan.label,
-    price: total, contact, contactMode,
-    orderId: 'ORD_' + Date.now().toString(36).toUpperCase()
+    plan:sel.id, label:sel.name, price:total,
+    contact, contactMode,
+    orderId:'ORD_'+Date.now().toString(36).toUpperCase()
   }));
 
-  setTimeout(() => {
-    window.location.href = `payment.html?plan=${selectedPlan.id}&price=${total}`;
+  setTimeout(()=>{
+    window.location.href = `payment.html?plan=${sel.id}&price=${total}`;
   }, 800);
 }
+
+/* ── Init ── */
+document.addEventListener('DOMContentLoaded', ()=>{
+  applySiteName();
+  // Read URL param
+  const urlPlan = new URLSearchParams(window.location.search).get('plan');
+  if(urlPlan){ const f = PLANS.find(p=>p.id===urlPlan); if(f) sel=f; }
+  buildRows();
+  updateSummary();
+});
 </script>
 </body>
 </html>
