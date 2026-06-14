@@ -1,174 +1,180 @@
+/* ================================================================
+   MAIN.JS — ServiceX Platform
+   © 2026 Codian Studio (PXJ)
+   
+   ✏ EDIT SITE CONFIG BELOW TO REBRAND
+================================================================ */
 
-/* ── BLUR / FOUC FIX ──────────────────────────────────────
-   Make hero elements visible immediately without waiting
-   for IntersectionObserver (which causes blur on slow net)
-────────────────────────────────────────────────────────── */
+/* ── SITE CONFIG ─────────────────────────────────────────────── */
+window.SITE_CONFIG = {
+  name:    'My Website',   // ← Change this ONE place - updates ALL pages
+  letter:  'M',
+  tagline: 'Premium API Token Solutions',
+  year:    '2026',
+  tg:      '@support',
+};
+
+/* ── HERO BLUR FIX (runs before DOM ready) ───────────────────── */
 (function() {
-  // Mark hero reveal elements as visible immediately
-  function fixHeroBlur() {
-    var heroEls = document.querySelectorAll(
-      '#hero h1, #hero .hero-badge, #hero .hero-sub, ' +
-      '#hero .hero-btns, #hero .hero-stats, ' +
-      '#hero .hstat, #hero .hero-badge, ' +
-      '.iphone-outer, .phone-mockup-section'
+  function showHero() {
+    var els = document.querySelectorAll(
+      '#hero h1, #hero .hero-badge, #hero .hero-sub, #hero .hero-btns, ' +
+      '#hero .hero-stats, #hero .hstat, .iphone-outer, .phone-mockup-section, ' +
+      '#navbar, .nav-logo, .nav-actions'
     );
-    heroEls.forEach(function(el) {
+    els.forEach(function(el) {
       el.style.opacity = '1';
       el.style.transform = 'none';
       el.classList.add('in');
     });
   }
-  // Run immediately and after fonts load
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', fixHeroBlur);
+    document.addEventListener('DOMContentLoaded', showHero);
   } else {
-    fixHeroBlur();
+    showHero();
   }
-  // Also run after all resources load
-  window.addEventListener('load', fixHeroBlur);
+  window.addEventListener('load', showHero);
 })();
 
-/* ── NAV always visible ─────────────────────────────────── */
-(function() {
-  var nav = document.getElementById('navbar');
-  if (nav) { nav.style.opacity = '1'; nav.style.visibility = 'visible'; }
-})();
 /* ================================================================
-   MAIN.JS — Shared Logic
-   ✏  Edit SITE_CONFIG below to rebrand the entire site
+   AUTH — localStorage session
 ================================================================ */
-
-window.SITE_CONFIG = {
-  name:     'My Website',      // ← Change this ONE place — updates all pages
-  letter:   'M',               // ← Logo box letter
-  tagline:  'Premium API Token Solutions',
-  year:     '2026',
-  tg:       '@support',
+var Auth = {
+  KEY: '__sw_sess',
+  get: function() {
+    try { return JSON.parse(localStorage.getItem(this.KEY)); }
+    catch(e) { return null; }
+  },
+  save: function(u) { localStorage.setItem(this.KEY, JSON.stringify(u)); },
+  clear: function()  { localStorage.removeItem(this.KEY); },
+  isIn:  function()  { return !!this.get(); }
 };
+window.Auth = Auth;
 
-/* ── Apply name everywhere ──────────────────────────────────── */
+/* ── applySiteName ───────────────────────────────────────────── */
 function applySiteName() {
-  const cfg = window.SITE_CONFIG;
-  document.querySelectorAll('.site-name').forEach(el => el.textContent = cfg.name);
-  document.querySelectorAll('.site-letter').forEach(el => el.textContent = cfg.letter);
-  document.querySelectorAll('.site-copyright').forEach(el => {
+  var cfg = window.SITE_CONFIG;
+  document.querySelectorAll('.site-name').forEach(function(el)  { el.textContent = cfg.name; });
+  document.querySelectorAll('.site-letter').forEach(function(el){ el.textContent = cfg.letter; });
+  document.querySelectorAll('.site-copyright').forEach(function(el) {
     el.textContent = '© ' + cfg.year + ' ' + cfg.name + '. All rights reserved.';
   });
-  document.querySelectorAll('.site-tagline').forEach(el => el.textContent = cfg.tagline);
+  document.querySelectorAll('.site-tagline').forEach(function(el){ el.textContent = cfg.tagline; });
   if (document.title.includes('SITENAME')) {
     document.title = document.title.replace('SITENAME', cfg.name);
   }
 }
 window.applySiteName = applySiteName;
 
-/* ================================================================
-   AUTH — localStorage session
-================================================================ */
-const Auth = {
-  KEY: '__sw_sess',
-  get()     { try { return JSON.parse(localStorage.getItem(this.KEY)); } catch(e) { return null; } },
-  save(u)   { localStorage.setItem(this.KEY, JSON.stringify(u)); },
-  clear()   { localStorage.removeItem(this.KEY); },
-  isIn()    { return !!this.get(); },
-};
-window.Auth = Auth;
-
-/* ── Update nav auth state ──────────────────────────────────── */
+/* ── refreshNav ──────────────────────────────────────────────── */
 function refreshNav() {
-  const user = Auth.get();
-  const acts = document.getElementById('navActions');
-  const mob  = document.getElementById('mobileActions');
-  if (!acts) return;
+  var user = Auth.get();
+  var acts = document.getElementById('navActions');
+  var mob  = document.getElementById('mobileActions');
 
-  if (user) {
-    const init = (user.username || user.email || 'U')[0].toUpperCase();
-    acts.innerHTML = `
-      <div style="display:flex;align-items:center;gap:8px">
-        <div style="width:34px;height:34px;border-radius:50%;background:var(--acc);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#fff">${init}</div>
-        <span style="font-size:13px;color:var(--d-t2);font-weight:500">${user.username || user.email.split('@')[0]}</span>
-      </div>
-      <button onclick="doLogout()" style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);color:#8888aa;padding:7px 14px;border-radius:9px;font-size:13px;cursor:pointer;font-family:var(--sans)">Logout</button>`;
-    if (mob) mob.innerHTML = `<a href="#" onclick="doLogout()" style="color:var(--acc);font-weight:600">Logout (${user.username || user.email.split('@')[0]})</a>`;
-  } else {
-    acts.innerHTML = `
-      <a href="login.html" class="btn btn-ghost" style="font-size:13px;padding:8px 16px;">Login</a>
-      <a href="register.html" class="btn btn-primary" style="font-size:13px;padding:8px 16px;">Get Started →</a>`;
-    if (mob) mob.innerHTML = `
-      <a href="login.html" class="drawer-auth-btn drawer-auth-login">Login</a>
-      <a href="register.html" class="drawer-auth-btn drawer-auth-signup">Get Started →</a>`;
+  if (acts) {
+    if (user) {
+      var init = (user.username || user.email || 'U')[0].toUpperCase();
+      var name = user.username || (user.email ? user.email.split('@')[0] : 'User');
+      acts.innerHTML =
+        '<div style="display:flex;align-items:center;gap:8px">' +
+          '<div style="width:32px;height:32px;border-radius:50%;background:var(--acc);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#fff">' + init + '</div>' +
+          '<span style="font-size:13px;color:#8888aa;font-weight:500">' + name + '</span>' +
+        '</div>' +
+        '<button onclick="doLogout()" style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);color:#8888aa;padding:7px 14px;border-radius:9px;font-size:13px;cursor:pointer;font-family:var(--sans)">Logout</button>';
+      if (mob) mob.innerHTML =
+        '<a href="#" onclick="doLogout()" style="color:var(--acc);font-weight:600;text-decoration:none">Logout (' + name + ')</a>';
+    } else {
+      acts.innerHTML =
+        '<a href="login.html" class="btn btn-ghost" style="font-size:13px;padding:8px 16px">Login</a>' +
+        '<a href="register.html" class="btn btn-primary" style="font-size:13px;padding:8px 16px">Get Started →</a>';
+      if (mob) mob.innerHTML =
+        '<a href="login.html" class="drawer-auth-btn drawer-auth-login">Login</a>' +
+        '<a href="register.html" class="drawer-auth-btn drawer-auth-signup">Get Started →</a>';
+    }
   }
 }
+window.refreshNav = refreshNav;
 
+/* ── doLogout ────────────────────────────────────────────────── */
 function doLogout() {
-  Auth.clear();
+  if (window.__fbReady && window.__auth) {
+    window.__auth.signOut()
+      .then(function() { Auth.clear(); _afterLogout(); })
+      .catch(function() { Auth.clear(); _afterLogout(); });
+  } else {
+    Auth.clear(); _afterLogout();
+  }
+}
+function _afterLogout() {
   showToast('Logged out successfully.', 'success');
-  setTimeout(() => window.location.href = 'index.html', 800);
+  setTimeout(function() { window.location.href = 'index.html'; }, 800);
 }
 window.doLogout = doLogout;
+
+/* ── Firebase auth sync ──────────────────────────────────────── */
+function initFBSync() {
+  if (!window.__fbReady || !window.__auth) return;
+  window.__auth.onAuthStateChanged(function(user) {
+    if (user) {
+      var cur = Auth.get();
+      if (!cur || !cur.firebase) {
+        Auth.save({
+          uid: user.uid,
+          email: user.email,
+          username: user.displayName || user.email.split('@')[0],
+          firebase: true
+        });
+        refreshNav();
+      }
+    } else {
+      var cur = Auth.get();
+      if (cur && cur.firebase) { Auth.clear(); refreshNav(); }
+    }
+  });
+}
 
 /* ================================================================
    NAVBAR — Scroll + Hamburger + Drawer
 ================================================================ */
-window.addEventListener('scroll', () => {
-  document.getElementById('navbar')?.classList.toggle('scrolled', window.scrollY > 40);
+window.addEventListener('scroll', function() {
+  var nav = document.getElementById('navbar');
+  if (nav) nav.classList.toggle('scrolled', window.scrollY > 40);
 });
 
-function openDrawer()  { document.getElementById('drawerOverlay')?.classList.add('open'); document.getElementById('siteDrawer')?.classList.add('open'); document.body.style.overflow = 'hidden'; }
-function closeDrawer() { document.getElementById('drawerOverlay')?.classList.remove('open'); document.getElementById('siteDrawer')?.classList.remove('open'); document.body.style.overflow = ''; }
+function openDrawer() {
+  document.getElementById('drawerOverlay')?.classList.add('open');
+  document.getElementById('siteDrawer')?.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeDrawer() {
+  document.getElementById('drawerOverlay')?.classList.remove('open');
+  document.getElementById('siteDrawer')?.classList.remove('open');
+  document.body.style.overflow = '';
+}
 window.openDrawer  = openDrawer;
 window.closeDrawer = closeDrawer;
 
-document.getElementById('hamburger')?.addEventListener('click', openDrawer);
-document.getElementById('drawerClose')?.addEventListener('click', closeDrawer);
-document.getElementById('drawerOverlay')?.addEventListener('click', closeDrawer);
-
-/* ── Spring effect toggle ── */
-const springEl = document.getElementById('springToggle');
-if (springEl) {
-  const storedSpring = localStorage.getItem('__sw_spring') !== 'off';
-  if (!storedSpring) { document.body.classList.add('no-spring'); springEl.classList.remove('on'); }
-  else springEl.classList.add('on');
-  springEl.addEventListener('click', () => {
-    const on = springEl.classList.toggle('on');
-    localStorage.setItem('__sw_spring', on ? 'on' : 'off');
-    document.body.classList.toggle('no-spring', !on);
-  });
-}
-
-/* ── Theme toggle ── */
-const themeEl = document.getElementById('themeToggle');
-if (themeEl) {
-  const stored = localStorage.getItem('__sw_theme');
-  if (stored === 'light') { document.body.classList.add('light-theme'); themeEl.classList.add('on'); }
-  themeEl.addEventListener('click', () => {
-    const on = themeEl.classList.toggle('on');
-    document.body.classList.toggle('light-theme', on);
-    localStorage.setItem('__sw_theme', on ? 'light' : 'dark');
-  });
-}
-
 /* ── Language ── */
 function setLang(code) {
-  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === code));
+  document.querySelectorAll('.lang-btn').forEach(function(b) {
+    b.classList.toggle('active', b.dataset.lang === code);
+  });
   localStorage.setItem('__sw_lang', code);
+  var names = { en:'English', es:'Español', zh:'中文' };
+  showToast('Language: ' + (names[code] || code), 'success');
 }
 window.setLang = setLang;
 
-/* ── Active nav link ── */
-const _cp = window.location.pathname.split('/').pop() || 'index.html';
-document.querySelectorAll('.drawer-link').forEach(a => {
-  if (a.getAttribute('href') === _cp) a.classList.add('active');
-});
-
 /* ================================================================
-   PHONE MOCKUP — Code animation
+   OTP / PHONE MOCKUP — Rotating code
 ================================================================ */
-const otpEl = document.getElementById('otpNum');
+var otpEl = document.getElementById('otpNum');
 if (otpEl) {
   otpEl.style.transition = 'opacity .3s';
-  setInterval(() => {
+  setInterval(function() {
     otpEl.style.opacity = '0';
-    setTimeout(() => {
+    setTimeout(function() {
       otpEl.textContent = String(Math.floor(100000 + Math.random() * 900000));
       otpEl.style.opacity = '1';
     }, 300);
@@ -178,7 +184,7 @@ if (otpEl) {
 /* ================================================================
    COUNTRIES MARQUEE
 ================================================================ */
-const COUNTRIES_DATA = [
+var COUNTRIES_LIST = [
   {n:'India',c:'in'},{n:'USA',c:'us'},{n:'UK',c:'gb'},{n:'UAE',c:'ae'},
   {n:'Germany',c:'de'},{n:'France',c:'fr'},{n:'Canada',c:'ca'},{n:'Australia',c:'au'},
   {n:'Brazil',c:'br'},{n:'Japan',c:'jp'},{n:'Korea',c:'kr'},{n:'Italy',c:'it'},
@@ -193,45 +199,50 @@ const COUNTRIES_DATA = [
   {n:'Hong Kong',c:'hk'},{n:'New Zealand',c:'nz'},{n:'Ireland',c:'ie'},{n:'Hungary',c:'hu'},
   {n:'Sri Lanka',c:'lk'},{n:'Kenya',c:'ke'}
 ];
-const marqueeEl = document.getElementById('marquee');
+var marqueeEl = document.getElementById('marquee');
 if (marqueeEl) {
-  const doubled = [...COUNTRIES_DATA, ...COUNTRIES_DATA];
-  marqueeEl.innerHTML = doubled.map(c =>
-    `<div class="c-chip"><img src="https://flagcdn.com/w20/${c.c}.png" alt="${c.n}" loading="lazy" width="20" height="14"/>${c.n}</div>`
-  ).join('');
+  var doubled = COUNTRIES_LIST.concat(COUNTRIES_LIST);
+  marqueeEl.innerHTML = doubled.map(function(c) {
+    return '<div class="c-chip"><img src="https://flagcdn.com/w20/' + c.c + '.png" alt="' + c.n + '" loading="lazy" width="20" height="14"/>' + c.n + '</div>';
+  }).join('');
 }
 
 /* ================================================================
-   SPRING SCROLL REVEAL
+   SCROLL REVEAL — opacity stays 1, only translateY animates
 ================================================================ */
-// Reveal observer - opacity always 1, only animates translateY
-const revealObserver = new IntersectionObserver(entries => {
-  entries.forEach(e => {
+var revealObs = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
     if (e.isIntersecting) {
       e.target.classList.add('in');
-      revealObserver.unobserve(e.target);
+      revealObs.unobserve(e.target);
     }
   });
-}, { threshold: 0.04, rootMargin: '0px 0px -20px 0px' });
+}, { threshold: 0.05, rootMargin: '0px 0px -20px 0px' });
 
 function observeReveal() {
-  // Mark all as 'in' after 2s regardless (failsafe)
-  setTimeout(() => {
-    document.querySelectorAll('.reveal:not(.in)').forEach(el => {
+  // Failsafe: mark all as visible after 2s regardless
+  setTimeout(function() {
+    document.querySelectorAll('.reveal:not(.in)').forEach(function(el) {
       el.classList.add('in');
     });
   }, 2000);
-  // Normal observer
-  document.querySelectorAll('.reveal:not(.in)').forEach(el => revealObserver.observe(el));
+  document.querySelectorAll('.reveal:not(.in)').forEach(function(el) {
+    revealObs.observe(el);
+  });
 }
+window.observeReveal = observeReveal;
 
 /* ================================================================
-   FAQ ACCORDION (for FAQ page)
+   FAQ ACCORDION — works for both faq-item and faq-item-new
 ================================================================ */
 function toggleFaq(btn) {
-  const item = btn.closest('.faq-item-new');
-  const wasOpen = item.classList.contains('open');
-  document.querySelectorAll('.faq-item-new.open').forEach(i => i.classList.remove('open'));
+  // Works with both old .faq-item and new .faq-item-new
+  var item = btn.closest('.faq-item-new') || btn.closest('.faq-item');
+  if (!item) return;
+  var wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item-new.open, .faq-item.open').forEach(function(i) {
+    i.classList.remove('open');
+  });
   if (!wasOpen) item.classList.add('open');
 }
 window.toggleFaq = toggleFaq;
@@ -239,174 +250,102 @@ window.toggleFaq = toggleFaq;
 /* ================================================================
    TOAST
 ================================================================ */
-function showToast(msg, type = 'success') {
-  let t = document.getElementById('toast');
-  if (!t) { t = document.createElement('div'); t.id = 'toast'; t.className = 'toast'; document.body.appendChild(t); }
+function showToast(msg, type) {
+  type = type || 'success';
+  var t = document.getElementById('toast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'toast';
+    t.className = 'toast';
+    document.body.appendChild(t);
+  }
   t.className = 'toast ' + type;
-  t.innerHTML = `<span class="toast-icon">${type === 'success' ? '✅' : '❌'}</span><span>${msg}</span>`;
+  t.innerHTML = '<span class="toast-icon">' + (type === 'success' ? '✅' : '❌') + '</span><span>' + msg + '</span>';
   t.classList.add('show');
-  clearTimeout(t._timer);
-  t._timer = setTimeout(() => t.classList.remove('show'), 3500);
+  clearTimeout(t._t);
+  t._t = setTimeout(function() { t.classList.remove('show'); }, 3500);
 }
 window.showToast = showToast;
 
 /* ── Smooth anchors ── */
-document.querySelectorAll('a[href^="#"]').forEach(a => {
-  a.addEventListener('click', e => {
-    const t = document.querySelector(a.getAttribute('href'));
-    if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+document.querySelectorAll('a[href^="#"]').forEach(function(a) {
+  a.addEventListener('click', function(e) {
+    var target = document.querySelector(a.getAttribute('href'));
+    if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
   });
 });
 
-
-
-/* =====================================================
-   FIXES — Spring, Theme, Drawer on all screens
-===================================================== */
-
-// Apply saved theme on page load immediately (before DOM ready)
-(function() {
-  if (localStorage.getItem('__sw_theme') === 'light') {
-    document.body.classList.add('light-theme');
-  }
-  if (localStorage.getItem('__sw_spring') === 'off') {
-    document.body.classList.add('no-spring');
-  }
-})();
-
-// Spring toggle sync on load
-}
-
-  if (themeBtn) {
-    var lightOn = localStorage.getItem('__sw_theme') === 'light';
-    themeBtn.classList.toggle('on', lightOn);
-    document.body.classList.toggle('light-theme', lightOn);
-
-    themeBtn.addEventListener('click', function() {
-      var isOn = themeBtn.classList.toggle('on');
-      document.body.classList.toggle('light-theme', isOn);
-      localStorage.setItem('__sw_theme', isOn ? 'light' : 'dark');
-      showToast(isOn ? '☀️ Light theme ON' : '🌙 Dark theme ON', 'success');
-    });
-  }
-
-  // Re-observe any newly rendered reveal elements
-  setTimeout(observeReveal, 100);
-});
-
 /* ================================================================
-   THEME + SPRING TOGGLES — Fixed for all pages
-   Uses html element class (more reliable than body)
+   DOM READY — Single listener, runs everything
 ================================================================ */
 document.addEventListener('DOMContentLoaded', function() {
 
-  // ── Spring Toggle ──────────────────────────────────────────
+  /* 1. Apply site name */
+  applySiteName();
+
+  /* 2. Update nav (login state) */
+  refreshNav();
+
+  /* 3. Start reveal animations */
+  observeReveal();
+
+  /* 4. Firebase sync (if available) */
+  setTimeout(initFBSync, 600);
+
+  /* 5. Hamburger button */
+  var hbg = document.getElementById('hamburger');
+  if (hbg) {
+    hbg.addEventListener('click', openDrawer);
+  }
+  var dClose = document.getElementById('drawerClose');
+  if (dClose) dClose.addEventListener('click', closeDrawer);
+  var dOverlay = document.getElementById('drawerOverlay');
+  if (dOverlay) dOverlay.addEventListener('click', closeDrawer);
+
+  /* 6. Spring toggle */
   var springBtn = document.getElementById('springToggle');
   if (springBtn) {
     var springOn = localStorage.getItem('__sw_spring') !== 'off';
-    // Sync button state
     springBtn.classList.toggle('on', springOn);
-    // Sync html class
     document.documentElement.classList.toggle('no-spring', !springOn);
     document.body.classList.toggle('no-spring', !springOn);
-
     springBtn.addEventListener('click', function() {
       var isOn = springBtn.classList.toggle('on');
       localStorage.setItem('__sw_spring', isOn ? 'on' : 'off');
       document.documentElement.classList.toggle('no-spring', !isOn);
       document.body.classList.toggle('no-spring', !isOn);
-      showToast(isOn ? '✨ Spring effect ON' : 'Spring effect OFF', 'success');
+      showToast(isOn ? '✨ Spring ON' : 'Spring OFF', 'success');
     });
   }
 
-  // ── Theme Toggle ──────────────────────────────────────────
+  /* 7. Theme toggle */
   var themeBtn = document.getElementById('themeToggle');
   if (themeBtn) {
     var lightOn = localStorage.getItem('__sw_theme') === 'light';
-    // Sync button state
     themeBtn.classList.toggle('on', lightOn);
-    // Sync html + body class
     document.documentElement.classList.toggle('light-theme', lightOn);
     document.body.classList.toggle('light-theme', lightOn);
-
     themeBtn.addEventListener('click', function() {
       var isOn = themeBtn.classList.toggle('on');
       document.documentElement.classList.toggle('light-theme', isOn);
       document.body.classList.toggle('light-theme', isOn);
       localStorage.setItem('__sw_theme', isOn ? 'light' : 'dark');
-      showToast(isOn ? '☀️ Light theme ON' : '🌙 Dark theme ON', 'success');
+      showToast(isOn ? '☀️ Light theme' : '🌙 Dark theme', 'success');
     });
   }
 
-  // ── Language Toggle ───────────────────────────────────────
+  /* 8. Language restore */
   var storedLang = localStorage.getItem('__sw_lang') || 'en';
   document.querySelectorAll('.lang-btn').forEach(function(b) {
     b.classList.toggle('active', b.dataset.lang === storedLang);
   });
 
-  // ── Re-observe reveals after DOMContentLoaded ─────────────
-  observeReveal();
-  applySiteName();
-  refreshNav();
+  /* 9. Active nav link */
+  var cp = window.location.pathname.split('/').pop() || 'index.html';
+  document.querySelectorAll('.drawer-link').forEach(function(a) {
+    a.classList.toggle('active', a.getAttribute('href') === cp);
+  });
+
+  /* 10. Navbar scroll */
+  window.dispatchEvent(new Event('scroll'));
 });
-
-/* ================================================================
-   FIREBASE AUTH SYNC — keeps localStorage + Firebase in sync
-================================================================ */
-(function() {
-  // Listen for Firebase auth state changes
-  function initFirebaseAuthSync() {
-    if (window.__fbReady && window.__auth) {
-      window.__auth.onAuthStateChanged(function(user) {
-        if (user) {
-          // Firebase user logged in — sync to localStorage
-          var current = Auth.get();
-          if (!current || !current.firebase) {
-            Auth.save({
-              uid:      user.uid,
-              email:    user.email,
-              username: user.displayName || user.email.split('@')[0],
-              firebase: true
-            });
-            refreshNav();
-          }
-        } else {
-          // Firebase logged out
-          var current = Auth.get();
-          if (current && current.firebase) {
-            Auth.clear();
-            refreshNav();
-          }
-        }
-      });
-    }
-  }
-
-  // Run after Firebase config loads
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function() {
-      setTimeout(initFirebaseAuthSync, 500);
-    });
-  } else {
-    setTimeout(initFirebaseAuthSync, 500);
-  }
-})();
-
-/* ── Firebase logout support ── */
-function doLogout() {
-  if (window.__fbReady && window.__auth) {
-    window.__auth.signOut().then(function() {
-      Auth.clear();
-      showToast('Logged out successfully.', 'success');
-      setTimeout(function() { window.location.href = 'index.html'; }, 800);
-    }).catch(function() {
-      Auth.clear();
-      window.location.href = 'index.html';
-    });
-  } else {
-    Auth.clear();
-    showToast('Logged out.', 'success');
-    setTimeout(function() { window.location.href = 'index.html'; }, 800);
-  }
-}
-window.doLogout = doLogout;

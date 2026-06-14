@@ -3023,3 +3023,67 @@ code, .code-box, .addr-val {
   margin-bottom: 14px; align-items: center; gap: 8px;
 }
 .auth-error-dark.show { display: flex; }
+
+/* =====================================================
+   BUTTON CLICK FIXES — All buttons properly clickable
+===================================================== */
+
+/* Plan card buy buttons — always on top, always clickable */
+.btn-plan-new,
+.dark-plan-buy,
+.qp-plan-row-dark,
+.mkt-buy-btn,
+.pay-status-btn,
+.pay-qr-btn,
+.pay-retry-btn,
+.faq-trigger-new,
+.pay-faq-trigger,
+.qp-proceed-dark,
+.btn-telegram-full,
+.btn-continue-dark {
+  position: relative;
+  z-index: 2;
+  pointer-events: auto !important;
+  cursor: pointer;
+}
+
+/* Remove any pseudo-element that might block clicks */
+.plan-card-new::before,
+.dark-plan-card::before,
+.feat-card-new::before,
+.mkt-card::before {
+  pointer-events: none !important;
+}
+
+/* Plan card itself clickable but button z-index higher */
+.plan-card-new { cursor: default; }
+.dark-plan-card { cursor: default; }
+
+/* Market buy button — light bg override */
+.mkt-buy-btn {
+  background: var(--acc) !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 9px !important;
+  padding: 9px 18px !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  text-decoration: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  transition: all .22s !important;
+}
+.mkt-buy-btn:hover { background: var(--acc-h) !important; transform: scale(1.03) !important; }
+
+/* FAQ chevron always visible */
+.faq-chevron-new {
+  pointer-events: none;
+  flex-shrink: 0;
+}
+
+/* Drawer close button */
+.drawer-close { pointer-events: auto !important; z-index: 2; }
+
+/* Copy address button on payment page */
+.pay-addr-copy-btn { pointer-events: auto !important; z-index: 2; }
+.pay-copy-btn      { pointer-events: auto !important; z-index: 2; }
